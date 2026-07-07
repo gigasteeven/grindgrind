@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #0a0705;
+    color: #f5f0eb;
+    font-family: "Inter", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: rgba(255, 107, 26, 0.3);
+    color: #f5f0eb;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #1a0f08;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #3d2317;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #ff6b1a;
+  }
+}
+
+@layer components {
+  /* Reusable card */
+  .cg-card {
+    @apply rounded-lg border border-cg-border bg-cg-dark-brown p-5 transition-all duration-300;
+    will-change: transform, opacity;
+  }
+  .cg-card:hover {
+    transform: translateY(-3px);
+    @apply border-cg-orange/50;
+    box-shadow: 0 4px 20px rgba(255, 107, 26, 0.1);
+  }
+
+  /* Reusable button */
+  .cg-btn {
+    @apply rounded-md px-4 py-2 text-sm font-medium transition-all duration-200;
+    will-change: transform;
+  }
+  .cg-btn:hover {
+    transform: scale(1.03);
+  }
+  .cg-btn-primary {
+    @apply bg-gradient-to-r from-cg-orange to-cg-yellow text-cg-black;
+  }
+  .cg-btn-primary:hover {
+    box-shadow: 0 0 15px rgba(255, 107, 26, 0.4);
+  }
+  .cg-btn-ghost {
+    @apply border border-cg-border text-cg-white-dim;
+  }
+  .cg-btn-ghost:hover {
+    @apply border-cg-orange text-cg-white;
+  }
+
+  /* Section title */
+  .cg-section-title {
+    @apply text-2xl font-bold tracking-tight;
+  }
+
+  /* Input field */
+  .cg-input {
+    @apply w-full rounded-md border border-cg-border bg-cg-brown px-4 py-2.5 text-cg-white placeholder-cg-white-dim/50 outline-none transition-all duration-200;
+  }
+  .cg-input:focus {
+    @apply border-cg-orange;
+    box-shadow: 0 0 0 2px rgba(255, 107, 26, 0.15);
+  }
+
+  /* Badge */
+  .cg-badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

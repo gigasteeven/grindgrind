@@ -1,0 +1,943 @@
+{
+  "order": [
+    "transcededflight",
+    "zeFiRKi",
+    "last",
+    "FearNot",
+    "juggernautc",
+    "slopeless",
+    "UgolEK",
+    "AYRELIA2026",
+    "Hellahard",
+    "deadsweat",
+    "autism",
+    "ARTEMSVOSHKIN",
+    "NCOFCEXIII",
+    "Birthdaygift",
+    "silentCirclesofDex",
+    "SPEARSnWAVS",
+    "MinotauRUS",
+    "lostangels",
+    "bluesneakers",
+    "fanreoum",
+    "fancore",
+    "oneeight",
+    "BirthdayCake",
+    "challengeI"
+  ],
+  "challenges": [
+    {
+      "id": 143844427,
+      "name": "Transcended Flight",
+      "author": "LitePack",
+      "creators": [],
+      "verifier": "MiRPacK19",
+      "verification": "https://youtu.be/KjGWKGR02lU",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "MiRPacK19",
+          "link": "https://youtu.be/KjGWKGR02lU",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 128449962,
+      "name": "zeFiRKi",
+      "author": "LTweQuQ",
+      "creators": [],
+      "verifier": "LTweQuQ",
+      "verification": "https://youtu.be/lmaLDPPrpxs?si=r0bm_bN7VCxRZ_pd",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "LTweQuQ",
+          "link": "https://youtu.be/lmaLDPPrpxs?si=r0bm_bN7VCxRZ_pd",
+          "percent": 100
+        },
+        {
+          "user": "KillerClean",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/93357",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 111931909,
+      "name": "last",
+      "author": "ForlornGMD",
+      "creators": [],
+      "verifier": "Zust88",
+      "verification": "https://youtu.be/BwiHgFO1ucI?si=0FBmVfMKAxOnfCJp",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "Zust88",
+          "link": "https://youtu.be/BwiHgFO1ucI?si=0FBmVfMKAxOnfCJp",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 142514178,
+      "name": "Fear Not",
+      "author": "LevkaLevka",
+      "creators": [],
+      "verifier": "LevkaLevka",
+      "verification": "https://t.me/CHALLENGE_GRIND/114/75886",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "LevkaLevka",
+          "link": "https://t.me/CHALLENGE_GRIND/114/75886",
+          "percent": 100
+        },
+        {
+          "user": "MiRPacK19",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/91761",
+          "percent": 100
+        },
+        {
+          "user": "KillerClean",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/92759",
+          "percent": 100
+        },
+        {
+          "user": "LTweQuQ",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103685",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 142617697,
+      "name": "Juggernaut C",
+      "author": "LitePack",
+      "creators": [],
+      "verifier": "MiRPacK19",
+      "verification": "https://youtu.be/uhxV48VmQMQ?si=2oVMXU7qW37tYczw",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "MiRPacK19",
+          "link": "https://youtu.be/uhxV48VmQMQ?si=2oVMXU7qW37tYczw",
+          "percent": 100
+        },
+        {
+          "user": "LTweQuQ",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103306",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 141645309,
+      "name": "slopeless",
+      "author": "kocMoct",
+      "creators": [],
+      "verifier": "KillerClean",
+      "verification": "",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "KillerClean",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/92958",
+          "percent": 100
+        },
+        {
+          "user": "Triscis",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/98808",
+          "percent": 100
+        },
+        {
+          "user": "itslafy",
+          "link": "",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 141723572,
+      "name": "UgolEK",
+      "author": "LTweQuQ",
+      "creators": [],
+      "verifier": "LTweQuQ",
+      "verification": "",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "LTweQuQ",
+          "link": "",
+          "percent": 100
+        },
+        {
+          "user": "MiRPacK19",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/91599",
+          "percent": 100
+        },
+        {
+          "user": "KillerClean",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/92380",
+          "percent": 100
+        },
+        {
+          "user": "Triscis",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/99288",
+          "percent": 100
+        },
+        {
+          "user": "itslafy",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/98931",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 132947188,
+      "name": "AYRELIA2026",
+      "author": "ItzTheRealMint",
+      "creators": [],
+      "verifier": "ItzTheRealMint",
+      "verification": "https://t.me/CHALLENGE_GRIND/114/3234",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "ItzTheRealMint",
+          "link": "https://t.me/CHALLENGE_GRIND/114/3234",
+          "percent": 100
+        },
+        {
+          "user": "kunakov",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103387",
+          "percent": 100
+        },
+        {
+          "user": "itslafy",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103742",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 135608220,
+      "name": "Hella hard",
+      "author": "LevkaLevka",
+      "creators": [],
+      "verifier": "LevkaLevka",
+      "verification": "https://t.me/CHALLENGE_GRIND/114/3545",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "LevkaLevka",
+          "link": "https://t.me/CHALLENGE_GRIND/114/3545",
+          "percent": 100
+        },
+        {
+          "user": "ItzTheRealMint",
+          "link": "https://t.me/CHALLENGE_GRIND/114/3557",
+          "percent": 100
+        },
+        {
+          "user": "KillerClean",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/92323",
+          "percent": 100
+        },
+        {
+          "user": "Triscis",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/98567",
+          "percent": 100
+        },
+        {
+          "user": "itslafy",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/100561",
+          "percent": 100
+        },
+        {
+          "user": "qropo",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103640",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 141371850,
+      "name": "Unnerfed Dead Sweat",
+      "author": "ManiaQGMD",
+      "creators": [],
+      "verifier": "Strafe",
+      "verification": "",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "Strafe",
+          "link": "",
+          "percent": 100
+        },
+        {
+          "user": "LTweQuQ",
+          "link": "https://t.me/CHALLENGE_GRIND/101073/105127",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 139279713,
+      "name": "autism",
+      "author": "mulpik",
+      "creators": [],
+      "verifier": "LTweQuQ",
+      "verification": "https://t.me/CHALLENGE_GRIND/114/25044",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "LTweQuQ",
+          "link": "https://t.me/CHALLENGE_GRIND/114/25044",
+          "percent": 100
+        },
+        {
+          "user": "ItzTheRealMint",
+          "link": "",
+          "percent": 100
+        },
+        {
+          "user": "pexa2280",
+          "link": "https://drive.google.com/file/d/1HFLgfdd1VonJcrQXn8nRSff2T6yDWgKN/view",
+          "percent": 100
+        },
+        {
+          "user": "Triscis",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/99350",
+          "percent": 100
+        },
+        {
+          "user": "itslafy",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/100785",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 139394405,
+      "name": "ARTEMSVOSHKIN",
+      "author": "NewHiGun",
+      "creators": [],
+      "verifier": "NewHiGun",
+      "verification": "https://t.me/CHALLENGE_GRIND/114/25491",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "NewHiGun",
+          "link": "https://t.me/CHALLENGE_GRIND/114/25491",
+          "percent": 100
+        },
+        {
+          "user": "ItzTheRealMint",
+          "link": "",
+          "percent": 100
+        },
+        {
+          "user": "KillerClean",
+          "link": "",
+          "percent": 100
+        },
+        {
+          "user": "Triscis",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/100785",
+          "percent": 100
+        },
+        {
+          "user": "itslafy",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/97583",
+          "percent": 100
+        },
+        {
+          "user": "qropo",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103598",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 140322676,
+      "name": "NC OF CEX III",
+      "author": "IMGGBOBRSLAYER",
+      "creators": [],
+      "verifier": "GGBOBR",
+      "verification": "https://t.me/CHALLENGE_GRIND/8/36602",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "GGBOBR",
+          "link": "https://t.me/CHALLENGE_GRIND/8/36602",
+          "percent": 100
+        },
+        {
+          "user": "KillerClean",
+          "link": "",
+          "percent": 100
+        },
+        {
+          "user": "MiRPacK19",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/91734",
+          "percent": 100
+        },
+        {
+          "user": "Triscis",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/97478",
+          "percent": 100
+        },
+        {
+          "user": "itslafy",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/96806",
+          "percent": 100
+        },
+        {
+          "user": "kunakov",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103378",
+          "percent": 100
+        },
+        {
+          "user": "qropo",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103593",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 143285929,
+      "name": "Birthday Gift",
+      "author": "Niksup",
+      "creators": [],
+      "verifier": "KillerClean",
+      "verification": "https://t.me/CHALLENGE_GRIND/90629/93257",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "KillerClean",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/93257",
+          "percent": 100
+        },
+        {
+          "user": "Triscis",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/97201",
+          "percent": 100
+        },
+        {
+          "user": "itslafy",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/97583",
+          "percent": 100
+        },
+        {
+          "user": "LTweQuQ",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103670",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 143866568,
+      "name": "silentCircles of Dex",
+      "author": "GGBOBR",
+      "creators": [],
+      "verifier": "GGBOBR",
+      "verification": "https://t.me/CHALLENGE_GRIND/114/3230",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "GGBOBR",
+          "link": "",
+          "percent": 100
+        },
+        {
+          "user": "LevkaLevka",
+          "link": "",
+          "percent": 100
+        },
+        {
+          "user": "ItzTheRealMint",
+          "link": "https://t.me/CHALLENGE_GRIND/114/3230",
+          "percent": 100
+        },
+        {
+          "user": "KillerClean",
+          "link": "",
+          "percent": 100
+        },
+        {
+          "user": "Triscis",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/98503",
+          "percent": 100
+        },
+        {
+          "user": "TiraWu3",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103461",
+          "percent": 100
+        },
+        {
+          "user": "qropo",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103576",
+          "percent": 100
+        },
+        {
+          "user": "kunakov",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103647",
+          "percent": 100
+        },
+        {
+          "user": "LTweQuQ",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103670",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 142332030,
+      "name": "SPEARS n WAVS",
+      "author": "TiraWu3",
+      "creators": [],
+      "verifier": "TiraWu3",
+      "verification": "https://t.me/CHALLENGE_GRIND/114/73258",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "TiraWu3",
+          "link": "https://t.me/CHALLENGE_GRIND/114/73258",
+          "percent": 100
+        },
+        {
+          "user": "LevkaLevka",
+          "link": "https://t.me/CHALLENGE_GRIND/114/75278",
+          "percent": 100
+        },
+        {
+          "user": "ItzTheRealMint",
+          "link": "",
+          "percent": 100
+        },
+        {
+          "user": "KillerClean",
+          "link": "",
+          "percent": 100
+        },
+        {
+          "user": "itslafy",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/96339",
+          "percent": 100
+        },
+        {
+          "user": "Triscis",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/96508",
+          "percent": 100
+        },
+        {
+          "user": "Kunakov",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/98705",
+          "percent": 100
+        },
+        {
+          "user": "pexa2280",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/98471",
+          "percent": 100
+        },
+        {
+          "user": "IlyassKrytoy",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/98471",
+          "percent": 100
+        },
+        {
+          "user": "qropo",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103590",
+          "percent": 100
+        },
+        {
+          "user": "LTweQuQ",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103670",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 141236697,
+      "name": "MinotauRUS",
+      "author": "ToouGD",
+      "creators": [],
+      "verifier": "ItzTheRealMint",
+      "verification": "",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "ItzTheRealMint",
+          "link": "",
+          "percent": 100
+        },
+        {
+          "user": "Strafe",
+          "link": "https://t.me/CHALLENGE_GRIND/114/53642",
+          "percent": 100
+        },
+        {
+          "user": "Niksup",
+          "link": "https://youtu.be/IxTDo8-Ebf4?si=rD-uX-8ONIgJEVhP",
+          "percent": 100
+        },
+        {
+          "user": "LTweQuQ",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103306",
+          "percent": 100
+        },
+        {
+          "user": "KillerClean",
+          "link": "",
+          "percent": 100
+        },
+        {
+          "user": "Triscis",
+          "link": " https://t.me/CHALLENGE_GRIND/90629/96013",
+          "percent": 100
+        },
+        {
+          "user": "itslafy",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103731",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 135559088,
+      "name": "Lost Angels",
+      "author": "PyrOwO",
+      "creators": [],
+      "verifier": "LTweQuQ",
+      "verification": "https://t.me/CHALLENGE_GRIND/101073/104977",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "LTweQuQ",
+          "link": "https://t.me/CHALLENGE_GRIND/101073/104977",
+          "percent": 100
+        },
+        {
+          "user": "LevkaLevka",
+          "link": "https://t.me/CHALLENGE_GRIND/101073/105007",
+          "percent": 100
+        },
+        {
+          "user": "qropo",
+          "link": "https://t.me/CHALLENGE_GRIND/101073/105224",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 136226717,
+      "name": "blue sneakers",
+      "author": "VerdantXD",
+      "creators": [],
+      "verifier": "Velance",
+      "verification": "https://youtu.be/TaIraaDZQyo?si=MH703nWHexnwDgyK",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "Velance",
+          "link": "https://youtu.be/TaIraaDZQyo?si=MH703nWHexnwDgyK",
+          "percent": 100
+        },
+        {
+          "user": "ItzTheRealMint",
+          "link": "",
+          "percent": 100
+        },
+        {
+          "user": "KillerClean",
+          "link": "",
+          "percent": 100
+        },
+        {
+          "user": "Zern0",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/97350",
+          "percent": 100
+        },
+        {
+          "user": "Triscis",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/97541",
+          "percent": 100
+        },
+        {
+          "user": "itslafy",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/97593",
+          "percent": 100
+        },
+        {
+          "user": "Kunakov",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/97605",
+          "percent": 100
+        },
+        {
+          "user": "pexa2280",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/98472",
+          "percent": 100
+        },
+        {
+          "user": "LTweQuQ",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103526",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 138874185,
+      "name": "fanreoum",
+      "author": "NewHiGun",
+      "creators": [],
+      "verifier": "NewHiGun",
+      "verification": "https://t.me/CHALLENGE_GRIND/114/19710",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "NewHiGun",
+          "link": "https://t.me/CHALLENGE_GRIND/114/19710",
+          "percent": 100
+        },
+        {
+          "user": "ItzTheRealMint",
+          "link": "",
+          "percent": 100
+        },
+        {
+          "user": "ToouGD",
+          "link": "https://t.me/CHALLENGE_GRIND/114/48105",
+          "percent": 100
+        },
+        {
+          "user": "KillerClean",
+          "link": "",
+          "percent": 100
+        },
+        {
+          "user": "Triscis",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/98305",
+          "percent": 100
+        },
+        {
+          "user": "itslafy",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/98856",
+          "percent": 100
+        },
+        {
+          "user": "LTweQuQ",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103526",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 138816183,
+      "name": "fancore",
+      "author": "NewHiGun",
+      "creators": [],
+      "verifier": "NewHiGun",
+      "verification": "https://t.me/CHALLENGE_GRIND/114/19122",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "NewHiGun",
+          "link": "https://t.me/CHALLENGE_GRIND/114/19122",
+          "percent": 100
+        },
+        {
+          "user": "ItzTheRealMint",
+          "link": "",
+          "percent": 100
+        },
+        {
+          "user": "KillerClean",
+          "link": "",
+          "percent": 100
+        },
+        {
+          "user": "Triscis",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/96295",
+          "percent": 100
+        },
+        {
+          "user": "Kunakov",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/97588",
+          "percent": 100
+        },
+        {
+          "user": "pexa2280",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/98467",
+          "percent": 100
+        },
+        {
+          "user": "LTweQuQ",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103526",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 135632572,
+      "name": "One Eight",
+      "author": "TururuTuturu",
+      "creators": [],
+      "verifier": "LTweQuQ",
+      "verification": "https://t.me/CHALLENGE_GRIND/90629/101066",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "LTweQuQ",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/101066",
+          "percent": 100
+        },
+        {
+          "user": "Kunakov",
+          "link": "https://t.me/CHALLENGE_GRIND/101073/101156",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 143207371,
+      "name": "Birthday Cake",
+      "author": "NikSupchik",
+      "creators": [],
+      "verifier": "KillerClean",
+      "verification": "https://t.me/CHALLENGE_GRIND/90629/92263",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "KillerClean",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/92263",
+          "percent": 100
+        },
+        {
+          "user": "Niksup",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/92788",
+          "percent": 100
+        },
+        {
+          "user": "Triscis",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/96222",
+          "percent": 100
+        },
+        {
+          "user": "itslafy",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/96329",
+          "percent": 100
+        },
+        {
+          "user": "Kunakov",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/97516",
+          "percent": 100
+        },
+        {
+          "user": "pexa2280",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/98466",
+          "percent": 100
+        },
+        {
+          "user": "stalkiep",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/99392",
+          "percent": 100
+        },
+        {
+          "user": "Ulkad",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103421",
+          "percent": 100
+        },
+        {
+          "user": "qwi64",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103434",
+          "percent": 100
+        },
+        {
+          "user": "LTweQuQ",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103526",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": 99748351,
+      "name": "challenge I",
+      "author": "BunnyCube",
+      "creators": [],
+      "verifier": "ItzTheRealMint",
+      "verification": "https://t.me/CHALLENGE_GRIND/114/3521",
+      "percentToQualify": 100,
+      "password": "Not Copyable",
+      "records": [
+        {
+          "user": "ItzTheRealMint",
+          "link": "https://t.me/CHALLENGE_GRIND/114/3521",
+          "percent": 100
+        },
+        {
+          "user": "1tzNameV3",
+          "link": "",
+          "percent": 100
+        },
+        {
+          "user": "KillerClean",
+          "link": "",
+          "percent": 100
+        },
+        {
+          "user": "Triscis",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/96216",
+          "percent": 100
+        },
+        {
+          "user": "stalkiep",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/97670",
+          "percent": 100
+        },
+        {
+          "user": "pexa2280",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/98465",
+          "percent": 100
+        },
+        {
+          "user": "TiraWu3",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103500",
+          "percent": 100
+        },
+        {
+          "user": "MrTomato246",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103507",
+          "percent": 100
+        },
+        {
+          "user": "kunakov",
+          "link": "https://t.me/CHALLENGE_GRIND/90629/103517",
+          "percent": 100
+        }
+      ]
+    }
+  ]
+}

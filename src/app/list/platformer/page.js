@@ -1,0 +1,45 @@
+import { getPlatformerList } from "@/lib/redis";
+import { calculatePoints } from "@/lib/formula";
+import ChallengeCard from "@/components/ChallengeCard";
+
+export const dynamic = "force-dynamic";
+
+export default async function PlatformerListPage() {
+  const challenges = await getPlatformerList();
+  const maxPos = challenges.length || 1;
+
+  return (
+    <div className="mx-auto max-w-5xl px-4 sm:px-6 py-8">
+      <div className="mb-8">
+        <h1 className="cg-section-title text-cg-white">Platformer List</h1>
+        <p className="mt-2 text-cg-white-dim">
+          {challenges.length > 0
+            ? `${challenges.length} platformer challenges ranked by difficulty. Records are timed.`
+            : "No platformer challenges yet. Stay tuned!"}
+        </p>
+      </div>
+
+      {challenges.length > 0 ? (
+        <div className="space-y-3">
+          {challenges.map((challenge, index) => {
+            const position = index + 1;
+            const points = calculatePoints(position, maxPos);
+            return (
+              <ChallengeCard
+                key={challenge.id}
+                challenge={challenge}
+                position={position}
+                points={points}
+                type="platformer"
+              />
+            );
+          })}
+        </div>
+      ) : (
+        <div className="cg-card text-center py-12">
+          <p className="text-cg-white-dim">Platformer challenges will appear here once added by staff.</p>
+        </div>
+      )}
+    </div>
+  );
+}
