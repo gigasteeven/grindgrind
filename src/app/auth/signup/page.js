@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 export default function AuthPage() {
-  const [mode, setMode] = useState("signup"); // "signup" | "login"
+  const [mode, setMode] = useState("signup");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [country, setCountry] = useState("");
@@ -32,7 +31,6 @@ export default function AuthPage() {
       if (data.error) {
         setError(data.error);
       } else {
-        // Store token in httpOnly cookie via API response
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
         router.push("/profile");
@@ -44,14 +42,14 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="mx-auto max-w-md px-4 sm:px-6 py-12">
-      <div className="cg-card">
+    <div className="mx-auto max-w-md px-3 sm:px-6 py-8 sm:py-12">
+      <div className="cg-card p-5 sm:p-6">
         {/* Tabs */}
-        <div className="flex gap-2 mb-6 p-1 rounded-lg bg-cg-brown">
+        <div className="flex gap-2 mb-6 p-1 rounded-lg" style={{ backgroundColor: "var(--cg-surface-2)" }}>
           <button
             onClick={() => { setMode("signup"); setError(""); }}
             className={`flex-1 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
-              mode === "signup" ? "bg-cg-orange text-cg-black" : "text-cg-white-dim hover:text-cg-white"
+              mode === "signup" ? "cg-btn-primary" : "text-cg-white-dim hover:text-cg-white"
             }`}
           >
             Sign Up
@@ -59,7 +57,7 @@ export default function AuthPage() {
           <button
             onClick={() => { setMode("login"); setError(""); }}
             className={`flex-1 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
-              mode === "login" ? "bg-cg-orange text-cg-black" : "text-cg-white-dim hover:text-cg-white"
+              mode === "login" ? "cg-btn-primary" : "text-cg-white-dim hover:text-cg-white"
             }`}
           >
             Login
@@ -116,7 +114,7 @@ export default function AuthPage() {
           )}
 
           {/* Cloudflare Turnstile placeholder */}
-          <div className="rounded-md border border-cg-border bg-cg-brown/50 p-3 text-center">
+          <div className="rounded-md border border-cg-border p-3 text-center" style={{ backgroundColor: "color-mix(in srgb, var(--cg-surface-2) 50%, transparent)" }}>
             <p className="text-xs text-cg-white-dim">
               🛡️ Cloudflare Turnstile captcha will appear here in production
             </p>

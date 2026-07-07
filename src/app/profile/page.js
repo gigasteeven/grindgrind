@@ -9,8 +9,8 @@ function CountryFlag({ code, size = 64 }) {
   if (!code || code.length !== 2) {
     return (
       <div
-        className="rounded-full bg-cg-brown border-2 border-cg-orange/30 flex items-center justify-center shrink-0"
-        style={{ width: size, height: size }}
+        className="rounded-full border-2 flex items-center justify-center shrink-0"
+        style={{ width: size, height: size, backgroundColor: "var(--cg-surface-2)", borderColor: "color-mix(in srgb, var(--cg-orange) 30%, transparent)" }}
       >
         <span className="text-2xl font-bold text-cg-orange">?</span>
       </div>
@@ -20,8 +20,8 @@ function CountryFlag({ code, size = 64 }) {
     <img
       src={`https://flagcdn.com/${code.toLowerCase()}.svg`}
       alt={code}
-      className="rounded-full border-2 border-cg-orange/30 object-cover shrink-0"
-      style={{ width: size, height: size }}
+      className="rounded-full border-2 object-cover shrink-0"
+      style={{ width: size, height: size, borderColor: "color-mix(in srgb, var(--cg-orange) 30%, transparent)" }}
     />
   );
 }
@@ -90,11 +90,11 @@ export default function ProfilePage() {
   if (!user) return null;
 
   return (
-    <div className="mx-auto max-w-3xl px-4 sm:px-6 py-8">
+    <div className="mx-auto max-w-3xl px-3 sm:px-6 py-6 sm:py-8">
       {/* ── Profile Header ── */}
       <div className="cg-card mb-6 overflow-hidden">
         {/* Banner */}
-        <div className="h-20 bg-gradient-to-r from-cg-brown via-cg-brown-light to-cg-brown border-b border-cg-border" />
+        <div className="h-20 border-b border-cg-border" style={{ backgroundImage: "linear-gradient(to right, var(--cg-surface-2), var(--cg-surface), var(--cg-surface-2))" }} />
 
         <div className="px-5 pb-5">
           <div className="flex items-end gap-4 -mt-10">
@@ -116,9 +116,7 @@ export default function ProfilePage() {
               </p>
             </div>
             {user.isAdmin && (
-              <Link href="/admin" className="cg-btn cg-btn-ghost text-sm mb-1">
-                Admin
-              </Link>
+              <Link href="/admin" className="cg-btn cg-btn-ghost text-sm mb-1">Admin</Link>
             )}
           </div>
         </div>
@@ -151,29 +149,18 @@ export default function ProfilePage() {
           <h3 className="text-sm font-bold text-cg-white">Completions</h3>
         </div>
         {stats?.completions?.length ? (
-          <div className="divide-y divide-cg-border/30">
+          <div className="divide-y" style={{ borderColor: "color-mix(in srgb, var(--cg-border) 30%, transparent)" }}>
             {stats.completions
               .sort((a, b) => a.position - b.position)
               .map((c, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center gap-3 px-5 py-2.5 transition-colors duration-150 hover:bg-cg-brown/30"
-                >
+                <div key={idx} className="flex items-center gap-3 px-5 py-2.5 transition-colors duration-150 hover:bg-cg-surface-2/30" style={{ borderColor: "color-mix(in srgb, var(--cg-border) 30%, transparent)" }}>
                   <span className="text-xs font-bold text-cg-orange w-8 shrink-0">#{c.position}</span>
-                  <Link
-                    href={`/level/challenge/${c.challengeId}`}
-                    className="flex-1 text-sm text-cg-white hover:text-cg-orange transition-colors truncate"
-                  >
+                  <Link href={`/level/challenge/${c.challengeId}`} className="flex-1 text-sm text-cg-white hover:text-cg-orange transition-colors truncate">
                     {c.challengeName}
                   </Link>
                   <span className="text-xs font-bold text-cg-yellow shrink-0">{c.points} pts</span>
                   {c.link && (
-                    <a
-                      href={c.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-cg-white-dim hover:text-cg-orange transition-colors shrink-0"
-                    >
+                    <a href={c.link} target="_blank" rel="noopener noreferrer" className="text-cg-white-dim hover:text-cg-orange transition-colors shrink-0">
                       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
                     </a>
                   )}
@@ -183,9 +170,7 @@ export default function ProfilePage() {
         ) : (
           <div className="px-5 py-8 text-center">
             <p className="text-sm text-cg-white-dim mb-3">No completions yet.</p>
-            <Link href="/submit" className="cg-btn cg-btn-primary text-sm">
-              Submit Record
-            </Link>
+            <Link href="/submit" className="cg-btn cg-btn-primary text-sm">Submit Record</Link>
           </div>
         )}
       </div>
@@ -200,18 +185,15 @@ export default function ProfilePage() {
         </div>
 
         {stats?.recordStatuses?.length ? (
-          <div className="divide-y divide-cg-border/30">
+          <div className="divide-y" style={{ borderColor: "color-mix(in srgb, var(--cg-border) 30%, transparent)" }}>
             {stats.recordStatuses.map((r) => (
-              <div key={r.id} className="px-5 py-3">
+              <div key={r.id} className="px-5 py-3" style={{ borderColor: "color-mix(in srgb, var(--cg-border) 30%, transparent)" }}>
                 <div className="flex items-center justify-between gap-3 mb-1.5">
                   <div className="flex items-center gap-2 min-w-0">
                     {r.challengePosition && (
                       <span className="text-xs font-bold text-cg-orange shrink-0">#{r.challengePosition}</span>
                     )}
-                    <Link
-                      href={`/level/challenge/${r.challengeId}`}
-                      className="text-sm text-cg-white hover:text-cg-orange transition-colors truncate"
-                    >
+                    <Link href={`/level/challenge/${r.challengeId}`} className="text-sm text-cg-white hover:text-cg-orange transition-colors truncate">
                       {r.challengeName}
                     </Link>
                   </div>
@@ -221,9 +203,7 @@ export default function ProfilePage() {
                   <span>{new Date(r.submittedAt).toLocaleDateString()}</span>
                   <span>{r.percent}%</span>
                   {r.videoLink && (
-                    <a href={r.videoLink} target="_blank" rel="noopener noreferrer" className="text-cg-orange hover:underline">
-                      Video ↗
-                    </a>
+                    <a href={r.videoLink} target="_blank" rel="noopener noreferrer" className="text-cg-orange hover:underline">Video ↗</a>
                   )}
                 </div>
                 {r.status === "rejected" && r.reason && (
@@ -237,9 +217,7 @@ export default function ProfilePage() {
         ) : (
           <div className="px-5 py-6 text-center">
             <p className="text-sm text-cg-white-dim">No submissions yet.</p>
-            <Link href="/submit" className="cg-btn cg-btn-ghost text-sm mt-3 inline-block">
-              Submit a Record
-            </Link>
+            <Link href="/submit" className="cg-btn cg-btn-ghost text-sm mt-3 inline-block">Submit a Record</Link>
           </div>
         )}
       </div>

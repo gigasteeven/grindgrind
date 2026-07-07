@@ -10,7 +10,7 @@ export default function SubmitRecordsPage() {
   const [playerName, setPlayerName] = useState("");
   const [videoLink, setVideoLink] = useState("");
   const [rawFootage, setRawFootage] = useState("");
-  const [time, setTime] = useState(""); // platformer only
+  const [time, setTime] = useState("");
   const [percent, setPercent] = useState("100");
   const [country, setCountry] = useState("");
   const [error, setError] = useState("");
@@ -36,9 +36,7 @@ export default function SubmitRecordsPage() {
       const res = await fetch(`/api/list?type=challenge`);
       const data = await res.json();
       setChallenges(data.challenges || []);
-    } catch {
-      // silent
-    }
+    } catch {}
   };
 
   const handleSubmit = async (e) => {
@@ -59,7 +57,7 @@ export default function SubmitRecordsPage() {
         challengeId: selectedChallenge,
         playerName,
         videoLink,
-        rawFootage: rawFootage || undefined, // optional
+        rawFootage: rawFootage || undefined,
         percent: parseInt(percent),
         country,
         listType,
@@ -91,30 +89,30 @@ export default function SubmitRecordsPage() {
   };
 
   return (
-    <div className="mx-auto max-w-2xl px-4 sm:px-6 py-8">
+    <div className="mx-auto max-w-2xl px-3 sm:px-6 py-6 sm:py-8">
       <h1 className="cg-section-title text-cg-white mb-2">Submit Records</h1>
-      <p className="text-cg-white-dim mb-8">
+      <p className="text-cg-white-dim mb-6 text-sm">
         Submit your completion. Staff will verify it before it appears on the list.
       </p>
 
       {!isLoggedIn && (
-        <div className="cg-card mb-6 border-cg-orange/30">
+        <div className="cg-card mb-6 border-cg-orange/30 p-4">
           <p className="text-sm text-cg-white">
             ⚠️ You need to be <a href="/auth/signup" className="text-cg-orange underline">logged in</a> to submit records.
           </p>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="cg-card space-y-5">
+      <form onSubmit={handleSubmit} className="cg-card p-4 sm:p-5 space-y-5">
         {/* List type toggle */}
         <div>
           <label className="block text-xs font-medium text-cg-white-dim mb-1.5">List Type</label>
-          <div className="flex gap-2 p-1 rounded-lg bg-cg-brown">
+          <div className="flex gap-2 p-1 rounded-lg" style={{ backgroundColor: "var(--cg-surface-2)" }}>
             <button
               type="button"
               onClick={() => setListType("challenge")}
               className={`flex-1 py-2 rounded-md text-sm font-medium transition-all ${
-                listType === "challenge" ? "bg-cg-orange text-cg-black" : "text-cg-white-dim"
+                listType === "challenge" ? "cg-btn-primary" : "text-cg-white-dim"
               }`}
             >
               Challenge
@@ -123,7 +121,7 @@ export default function SubmitRecordsPage() {
               type="button"
               onClick={() => setListType("platformer")}
               className={`flex-1 py-2 rounded-md text-sm font-medium transition-all ${
-                listType === "platformer" ? "bg-cg-orange text-cg-black" : "text-cg-white-dim"
+                listType === "platformer" ? "cg-btn-primary" : "text-cg-white-dim"
               }`}
             >
               Platformer
@@ -152,26 +150,13 @@ export default function SubmitRecordsPage() {
         {/* Player name */}
         <div>
           <label className="block text-xs font-medium text-cg-white-dim mb-1.5">Your Name</label>
-          <input
-            type="text"
-            value={playerName}
-            onChange={(e) => setPlayerName(e.target.value)}
-            className="cg-input"
-            required
-          />
+          <input type="text" value={playerName} onChange={(e) => setPlayerName(e.target.value)} className="cg-input" required />
         </div>
 
         {/* Video link */}
         <div>
           <label className="block text-xs font-medium text-cg-white-dim mb-1.5">Video Proof *</label>
-          <input
-            type="url"
-            value={videoLink}
-            onChange={(e) => setVideoLink(e.target.value)}
-            className="cg-input"
-            placeholder="https://youtu.be/..."
-            required
-          />
+          <input type="url" value={videoLink} onChange={(e) => setVideoLink(e.target.value)} className="cg-input" placeholder="https://youtu.be/..." required />
         </div>
 
         {/* Raw footage (optional) */}
@@ -179,13 +164,7 @@ export default function SubmitRecordsPage() {
           <label className="block text-xs font-medium text-cg-white-dim mb-1.5">
             Raw Footage <span className="text-cg-white-dim/50">(optional)</span>
           </label>
-          <input
-            type="url"
-            value={rawFootage}
-            onChange={(e) => setRawFootage(e.target.value)}
-            className="cg-input"
-            placeholder="https://youtu.be/... (unlisted raw footage)"
-          />
+          <input type="url" value={rawFootage} onChange={(e) => setRawFootage(e.target.value)} className="cg-input" placeholder="https://youtu.be/... (unlisted raw footage)" />
           <p className="text-xs text-cg-white-dim/50 mt-1">Raw footage is optional but helps with verification.</p>
         </div>
 
@@ -193,60 +172,30 @@ export default function SubmitRecordsPage() {
         {listType === "platformer" && (
           <div>
             <label className="block text-xs font-medium text-cg-white-dim mb-1.5">Completion Time</label>
-            <input
-              type="text"
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
-              className="cg-input"
-              placeholder="e.g. 1:23.456"
-              required
-            />
+            <input type="text" value={time} onChange={(e) => setTime(e.target.value)} className="cg-input" placeholder="e.g. 1:23.456" required />
           </div>
         )}
 
         {/* Percent */}
         <div>
           <label className="block text-xs font-medium text-cg-white-dim mb-1.5">Percent (%)</label>
-          <input
-            type="number"
-            value={percent}
-            onChange={(e) => setPercent(e.target.value)}
-            className="cg-input"
-            min="1"
-            max="100"
-            required
-          />
+          <input type="number" value={percent} onChange={(e) => setPercent(e.target.value)} className="cg-input" min="1" max="100" required />
         </div>
 
         {/* Country */}
         <div>
           <label className="block text-xs font-medium text-cg-white-dim mb-1.5">Country (optional)</label>
-          <input
-            type="text"
-            value={country}
-            onChange={(e) => setCountry(e.target.value.toUpperCase().slice(0, 2))}
-            className="cg-input"
-            placeholder="2-letter code"
-            maxLength={2}
-          />
+          <input type="text" value={country} onChange={(e) => setCountry(e.target.value.toUpperCase().slice(0, 2))} className="cg-input" placeholder="2-letter code" maxLength={2} />
         </div>
 
         {error && (
-          <div className="rounded-md border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm text-red-400">
-            {error}
-          </div>
+          <div className="rounded-md border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm text-red-400">{error}</div>
         )}
         {success && (
-          <div className="rounded-md border border-green-500/30 bg-green-500/10 px-4 py-2.5 text-sm text-green-400">
-            {success}
-          </div>
+          <div className="rounded-md border border-green-500/30 bg-green-500/10 px-4 py-2.5 text-sm text-green-400">{success}</div>
         )}
 
-        <button
-          type="submit"
-          disabled={loading || !isLoggedIn}
-          className="cg-btn cg-btn-primary w-full text-base py-3 disabled:opacity-50"
-        >
+        <button type="submit" disabled={loading || !isLoggedIn} className="cg-btn cg-btn-primary w-full text-base py-3 disabled:opacity-50">
           {loading ? "Submitting..." : "Submit Record"}
         </button>
       </form>

@@ -1,5 +1,25 @@
 # Changelog — ChallengeGrind
 
+## [0.4.2] — 2026-07-07: Full theme support across all pages, admin user list fix
+
+### Theme Support — All Pages
+- **globals.css**: добавлены все utility классы с opacity вариантами через CSS variables
+- **Auth page**: табы, форма, инпуты — все используют CSS переменные
+- **Submit Records**: форма, инпуты, кнопки, toggle — themed
+- **Rules / Submission**: карточки, нумерация — themed
+- **Staff**: карточки, аватары, соцсети — themed
+- **Social Media**: карточки платформ — themed
+- **Profile**: баннер, статы, completions, record status — themed
+- **Admin Panel**: табы, карточки, инпуты — themed
+- **Stats Viewer**: панели, делители — themed
+- **Level Detail**: glass элементы, таблица — themed
+- Все hardcoded Tailwind цвета заменены на CSS variables
+
+### Admin Panel — Users Tab
+- Owner (admin) отображается отдельно с 👑 значком
+- Обычные админы и игроки — в общем списке
+- Кнопка Edit работает для всех кроме owner
+
 ## [0.4.1] — 2026-07-07: Fix theme colors on home page, footer, accent bar
 
 ### Bug Fixes

@@ -496,12 +496,35 @@ function UsersTab({ token, log }) {
 
   if (loading) return <p className="text-cg-white-dim">Loading...</p>;
 
+  // Separate owner from other users
+  const owner = users.find(u => u.isOwner);
+  const otherUsers = users.filter(u => !u.isOwner);
+
   return (
     <div className="space-y-3">
       {success && (
         <div className="cg-card border-green-500/30 p-3 text-sm text-green-400">{success}</div>
       )}
-      {users.map((u) => (
+
+      {/* Owner — displayed separately */}
+      {owner && (
+        <div className="cg-card p-4" style={{ borderColor: "color-mix(in srgb, var(--cg-yellow) 30%, var(--cg-border))" }}>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-cg-surface-2 border border-cg-border flex items-center justify-center">
+              <span className="text-sm font-bold text-cg-yellow">👑</span>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-cg-white">{owner.username}</p>
+              <p className="text-xs text-cg-white-dim">
+                {owner.country || "No country"} · Owner
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Other users */}
+      {otherUsers.map((u) => (
         <div key={u.username} className="cg-card p-4">
           <div className="flex items-center justify-between flex-wrap gap-3">
             <div className="flex items-center gap-3">
@@ -511,7 +534,7 @@ function UsersTab({ token, log }) {
               <div>
                 <p className="text-sm font-medium text-cg-white">{u.username}</p>
                 <p className="text-xs text-cg-white-dim">
-                  {u.country || "No country"} · {u.isAdmin ? (u.isOwner ? "Owner" : "Admin") : "Player"}
+                  {u.country || "No country"} · {u.isAdmin ? "Admin" : "Player"}
                 </p>
               </div>
             </div>
@@ -549,10 +572,7 @@ function UsersTab({ token, log }) {
                   placeholder="e.g. RU, US, DE"
                 />
               </div>
-              <button
-                onClick={() => saveUser(u.username)}
-                className="cg-btn cg-btn-primary text-sm"
-              >
+              <button onClick={() => saveUser(u.username)} className="cg-btn cg-btn-primary text-sm">
                 Save Changes
               </button>
             </div>

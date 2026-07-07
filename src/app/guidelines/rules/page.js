@@ -20,11 +20,11 @@ export default async function RulesPage() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 sm:px-6 py-8">
+    <div className="mx-auto max-w-3xl px-3 sm:px-6 py-6 sm:py-8">
       <h1 className="cg-section-title text-cg-white mb-2">Rules</h1>
-      <p className="text-cg-white-dim mb-8">Follow these rules to keep the list fair and legitimate.</p>
+      <p className="text-cg-white-dim mb-6 text-sm">Follow these rules to keep the list fair and legitimate.</p>
 
-      <div className="cg-card">
+      <div className="cg-card p-5">
         <ol className="space-y-4">
           {rules.map((rule, idx) => (
             <li key={idx} className="flex gap-3">
