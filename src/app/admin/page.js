@@ -70,10 +70,83 @@ function AdminLogin({ onLogin }) {
 }
 
 /* ── Tab content components ── */
+function AddChallengeForm({ token, log, onAdded }) {
+  const [form, setForm] = useState({
+    name: "", id: "", author: "", verifier: "", verification: "",
+    password: "Not Copyable", percentToQualify: 100, listType: "challenge", tags: "",
+  });
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const submit = async () => {
+    setError("");
+    setSuccess("");
+    if (!form.name || !form.id || !form.verifier) {
+      setError("Name, Level ID, and Verifier are required");
+      return;
+    }
+    const body = {
+      ...form,
+      id: String(form.id),
+      percentToQualify: parseInt(form.percentToQualify) || 100,
+      tags: form.tags ? form.tags.split(",").map(t => t.trim()).filter(Boolean) : [],
+    };
+    const res = await fetch("/api/admin/challenges/add", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (data.error) {
+      setError(data.error);
+    } else {
+      log("Added challenge", { name: form.name, id: form.id });
+      setSuccess(`Added "${form.name}" to ${form.listType} list`);
+      setForm({ name: "", id: "", author: "", verifier: "", verification: "", password: "Not Copyable", percentToQualify: 100, listType: "challenge", tags: "" });
+      setTimeout(() => setSuccess(""), 3000);
+      onAdded();
+    }
+  };
+
+  return (
+    <div className="cg-card p-4 space-y-3">
+      <h3 className="text-sm font-semibold text-cg-orange">Add New Challenge</h3>
+
+      {/* List type */}
+      <div className="flex gap-2 p-1 rounded-lg" style={{ backgroundColor: "var(--cg-surface-2)" }}>
+        <button type="button" onClick={() => setForm({ ...form, listType: "challenge" })}
+          className={`flex-1 py-2 rounded-md text-sm font-medium transition-all ${form.listType === "challenge" ? "cg-btn-primary" : "text-cg-white-dim"}`}>
+          Challenge
+        </button>
+        <button type="button" onClick={() => setForm({ ...form, listType: "platformer" })}
+          className={`flex-1 py-2 rounded-md text-sm font-medium transition-all ${form.listType === "platformer" ? "cg-btn-primary" : "text-cg-white-dim"}`}>
+          Platformer
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <input className="cg-input" placeholder="Level Name *" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
+        <input className="cg-input" placeholder="Level ID *" value={form.id} onChange={e => setForm({ ...form, id: e.target.value })} />
+        <input className="cg-input" placeholder="Author" value={form.author} onChange={e => setForm({ ...form, author: e.target.value })} />
+        <input className="cg-input" placeholder="Verifier *" value={form.verifier} onChange={e => setForm({ ...form, verifier: e.target.value })} />
+        <input className="cg-input" placeholder="Verification Video URL" value={form.verification} onChange={e => setForm({ ...form, verification: e.target.value })} />
+        <input className="cg-input" placeholder="Password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} />
+        <input className="cg-input" type="number" placeholder="Qualify %" value={form.percentToQualify} onChange={e => setForm({ ...form, percentToQualify: e.target.value })} />
+        <input className="cg-input" placeholder="Tags (comma separated)" value={form.tags} onChange={e => setForm({ ...form, tags: e.target.value })} />
+      </div>
+
+      {error && <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/30 rounded-md px-3 py-2">{error}</div>}
+      {success && <div className="text-sm text-green-400 bg-green-500/10 border border-green-500/30 rounded-md px-3 py-2">{success}</div>}
+
+      <button onClick={submit} className="cg-btn cg-btn-primary text-sm w-full">Add Challenge</button>
+    </div>
+  );
+}
+
 function ChallengesTab({ token, log }) {
   const [challenges, setChallenges] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [editing, setEditing] = useState(null);
+  const [showAdd, setShowAdd] = useState(false);
 
   const fetchChallenges = async () => {
     const res = await fetch("/api/admin/challenges", {
@@ -115,8 +188,15 @@ function ChallengesTab({ token, log }) {
 
   return (
     <div className="space-y-3">
+      {/* Add challenge toggle */}
+      <button onClick={() => setShowAdd(!showAdd)} className="cg-btn cg-btn-primary text-sm w-full">
+        {showAdd ? "Close" : "+ Add New Challenge"}
+      </button>
+
+      {showAdd && <AddChallengeForm token={token} log={log} onAdded={fetchChallenges} />}
+
       {challenges.map((c, idx) => (
-        <div key={c.id} className="flex items-center gap-3 rounded-md border border-cg-border bg-cg-brown/50 px-4 py-3">
+        <div key={c.id} className="flex items-center gap-3 rounded-md border-2 border-cg-border bg-cg-surface-2/50 px-4 py-3">
           <span className="w-8 text-sm font-bold text-cg-orange">#{idx + 1}</span>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-cg-white truncate">{c.name}</p>
@@ -128,7 +208,7 @@ function ChallengesTab({ token, log }) {
             <button onClick={() => movePosition(c.id, 1)} disabled={idx === challenges.length - 1}
               className="cg-btn cg-btn-ghost px-2 py-1 text-xs disabled:opacity-30">↓</button>
             <button onClick={() => deleteChallenge(c.id, c.name)}
-              className="cg-btn px-2 py-1 text-xs border border-red-500/30 text-red-400 hover:bg-red-500/10">Del</button>
+              className="cg-btn px-2 py-1 text-xs border-2 border-red-500/30 text-red-400 hover:bg-red-500/10">Del</button>
           </div>
         </div>
       ))}

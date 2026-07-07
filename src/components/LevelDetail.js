@@ -5,12 +5,11 @@ import Link from "next/link";
 /* Country flag SVG */
 function CountryFlag({ code, size = 18 }) {
   if (!code || code.length !== 2) {
-    // International flag (white flag on pole)
     return (
       <svg width={size} height={Math.round(size * 0.75)} viewBox="0 0 24 18" className="inline-block shrink-0 rounded-sm">
         <rect width="24" height="18" rx="2" fill="#e0e0e0" stroke="#999" strokeWidth="0.5"/>
         <circle cx="12" cy="9" r="4" fill="none" stroke="#999" strokeWidth="1"/>
-        <text x="12" y="12" textAnchor="middle" fontSize="6" fill="#999">INT</text>
+        <text x="12" y="12" textAnchor="middle" fontSize="5" fill="#999" fontWeight="bold">INT</text>
       </svg>
     );
   }
@@ -69,7 +68,7 @@ export default function LevelDetail({ challenge, position, points, type }) {
 
       {/* ── Level Header (glass) ── */}
       <div className="cg-glass mb-4 sm:mb-6 overflow-hidden">
-        {/* Top accent bar — uses CSS variables for theme support */}
+        {/* Top accent bar */}
         <div className="h-1" style={{ backgroundImage: "linear-gradient(to right, var(--cg-accent-from), var(--cg-accent-to))" }} />
 
         <div className="p-4 sm:p-6">
@@ -158,7 +157,7 @@ export default function LevelDetail({ challenge, position, points, type }) {
       {/* ── Records (glass) ── */}
       <div className="cg-glass overflow-hidden">
         {/* Header */}
-        <div className="px-4 sm:px-5 py-3 sm:py-4 border-b border-cg-border">
+        <div className="px-4 sm:px-5 py-3 sm:py-4 border-b-2 border-cg-border">
           <div className="flex items-center justify-between flex-wrap gap-2">
             <h3 className="text-base sm:text-lg font-bold text-cg-white">Records</h3>
             <div className="flex items-center gap-2 sm:gap-3 text-xs">
@@ -179,12 +178,10 @@ export default function LevelDetail({ challenge, position, points, type }) {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-cg-border">
+                <tr className="border-b-2 border-cg-border">
                   <th className="text-left px-4 sm:px-5 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider w-10">#</th>
                   <th className="text-left px-2 sm:px-3 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider">Holder</th>
-                  <th className="text-left px-2 sm:px-3 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider w-16">Flag</th>
-                  <th className="text-left px-2 sm:px-3 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider w-12">Pre</th>
-                  <th className="text-center px-2 sm:px-3 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider w-12">100%</th>
+                  <th className="text-center px-2 sm:px-3 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider w-16">100%</th>
                   {isPlatformer && (
                     <th className="text-right px-2 sm:px-3 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider">Time</th>
                   )}
@@ -198,23 +195,16 @@ export default function LevelDetail({ challenge, position, points, type }) {
                       <span className="font-bold text-cg-white-dim">{idx + 1}</span>
                     </td>
                     <td className="px-2 sm:px-3 py-3">
-                      <span className="font-medium text-cg-white">{record.user}</span>
-                    </td>
-                    <td className="px-2 sm:px-3 py-3">
-                      <CountryFlag code={record.country} />
-                    </td>
-                    <td className="px-2 sm:px-3 py-3">
-                      {record.percent < 100 ? (
-                        <span className="text-cg-white-dim">{record.percent}%</span>
-                      ) : (
-                        <span className="text-cg-white-dim/20">—</span>
-                      )}
+                      <div className="flex items-center gap-2">
+                        <CountryFlag code={record.country} size={18} />
+                        <span className="font-medium text-cg-white">{record.user}</span>
+                      </div>
                     </td>
                     <td className="px-2 sm:px-3 py-3 text-center">
                       {record.percent === 100 ? (
-                        <span className="text-green-400 text-xs">✓</span>
+                        <span className="text-green-400 text-xs font-bold">100%</span>
                       ) : (
-                        <span className="text-cg-white-dim/20">—</span>
+                        <span className="text-cg-white-dim text-xs">{record.percent}%</span>
                       )}
                     </td>
                     {isPlatformer && (

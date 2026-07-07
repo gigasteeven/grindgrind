@@ -7,7 +7,7 @@
   --cg-bg: #0a0705;
   --cg-surface: #1a0f08;
   --cg-surface-2: #2d1810;
-  --cg-border: #3d2317;
+  --cg-border: #4a2a1a;
   --cg-orange: #ff6b1a;
   --cg-orange-bright: #ff8c42;
   --cg-yellow: #ffb627;
@@ -22,7 +22,7 @@
   --cg-bg: #211f20;
   --cg-surface: #2a2728;
   --cg-surface-2: #353031;
-  --cg-border: #453d3e;
+  --cg-border: #5a4d4e;
   --cg-orange: #e79291;
   --cg-orange-bright: #f0a8a7;
   --cg-yellow: #e79291;
@@ -37,7 +37,7 @@
   --cg-bg: #0a0a0a;
   --cg-surface: #1a1a1a;
   --cg-surface-2: #2a2a2a;
-  --cg-border: #3a3a3a;
+  --cg-border: #4a4a4a;
   --cg-orange: #e0e0e0;
   --cg-orange-bright: #f0f0f0;
   --cg-yellow: #ffffff;
@@ -99,6 +99,7 @@
   .text-cg-white-dim\/50 { color: color-mix(in srgb, var(--cg-text-dim) 50%, transparent); }
   .text-cg-white-dim\/30 { color: color-mix(in srgb, var(--cg-text-dim) 30%, transparent); }
   .text-cg-white-dim\/20 { color: color-mix(in srgb, var(--cg-text-dim) 20%, transparent); }
+  .text-cg-white-dim\/70 { color: color-mix(in srgb, var(--cg-text-dim) 70%, transparent); }
   .text-cg-orange\/40 { color: color-mix(in srgb, var(--cg-orange) 40%, transparent); }
   .text-cg-orange\/50 { color: color-mix(in srgb, var(--cg-orange) 50%, transparent); }
   .text-cg-orange\/30 { color: color-mix(in srgb, var(--cg-orange) 30%, transparent); }
@@ -142,23 +143,25 @@
 @layer components {
   /* ── Card ── */
   .cg-card {
-    @apply rounded-xl border;
+    @apply rounded-xl border-2;
     background-color: var(--cg-surface);
     border-color: var(--cg-border);
     will-change: transform, opacity;
   }
 
-  /* ── Glass card ── */
+  /* ── Glass card — stronger effect ── */
   .cg-glass {
-    @apply rounded-xl border backdrop-blur-md;
-    background-color: color-mix(in srgb, var(--cg-surface) 60%, transparent);
-    border-color: color-mix(in srgb, var(--cg-border) 50%, transparent);
+    @apply rounded-xl border-2 backdrop-blur-xl;
+    background-color: color-mix(in srgb, var(--cg-surface) 50%, transparent);
+    border-color: color-mix(in srgb, var(--cg-border) 60%, transparent);
+    box-shadow: 0 4px 30px color-mix(in srgb, var(--cg-bg) 40%, transparent),
+                inset 0 1px 0 color-mix(in srgb, var(--cg-text) 5%, transparent);
     will-change: transform, opacity;
   }
 
   /* ── Card with hover ── */
   .cg-card-hover {
-    @apply rounded-xl border transition-all duration-300;
+    @apply rounded-xl border-2 transition-all duration-300;
     background-color: var(--cg-surface);
     border-color: var(--cg-border);
     will-change: transform, opacity;
@@ -189,7 +192,7 @@
     box-shadow: 0 0 12px color-mix(in srgb, var(--cg-orange) 35%, transparent);
   }
   .cg-btn-ghost {
-    @apply border;
+    @apply border-2;
     border-color: var(--cg-border);
     color: var(--cg-text-dim);
   }
@@ -200,7 +203,7 @@
 
   /* ── Input ── */
   .cg-input {
-    @apply w-full rounded-lg border px-4 py-2.5 outline-none transition-all duration-200;
+    @apply w-full rounded-lg border-2 px-4 py-2.5 outline-none transition-all duration-200;
     background-color: var(--cg-surface-2);
     border-color: var(--cg-border);
     color: var(--cg-text);
@@ -210,7 +213,7 @@
   }
   .cg-input:focus {
     border-color: var(--cg-orange);
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--cg-orange) 12%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--cg-orange) 12%, transparent);
   }
 
   /* ── Badge ── */
@@ -252,7 +255,7 @@
 
   /* ── Divider ── */
   .cg-divider {
-    @apply border-t;
+    @apply border-t-2;
     border-color: var(--cg-border);
   }
 

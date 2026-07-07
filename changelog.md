@@ -1,5 +1,37 @@
 # Changelog — ChallengeGrind
 
+## [0.5.0] — 2026-07-07: Records redesign, add challenges, stronger glass, thicker borders
+
+### Records Table Redesign
+- Убраны колонки "Pre" и "Flag" (отдельная колонка)
+- Флаг теперь отображается **рядом с ником** слева
+- Остались только: #, Holder (с флагом), 100%, Proof
+- Для платформеров: + колонка Time
+
+### Admin Panel — Add Challenges
+- Новая кнопка "+ Add New Challenge" в Challenges tab
+- Форма добавления: Name, ID, Author, Verifier, Verification URL, Password, Qualify %, Tags, List Type (Challenge/Platformer)
+- API: POST /api/admin/challenges/add
+- Добавленные уровни появляются в списке сразу
+
+### Glass Shader — Stronger
+- backdrop-blur-xl вместо backdrop-blur-md
+- Полупрозрачный фон 50% (было 60%)
+- box-shadow с inset для глубины
+- Толще рамки: border-2 везде вместо border
+
+### Borders — Thicker
+- Все .cg-card, .cg-glass, .cg-card-hover: border-2
+- .cg-input: border-2
+- .cg-btn-ghost: border-2
+- .cg-divider: border-t-2
+- --cg-border цвет сделан светлее для видимости
+
+### Mobile Support
+- Все новые элементы адаптивны
+- Форма добавления: grid-cols-1 на мобиле, grid-cols-2 на десктопе
+- Records таблица: overflow-x-auto
+
 ## [0.4.2] — 2026-07-07: Full theme support across all pages, admin user list fix
 
 ### Theme Support — All Pages
