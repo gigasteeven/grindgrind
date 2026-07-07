@@ -1,5 +1,23 @@
 # Changelog — ChallengeGrind
 
+## [0.8.0] — 2026-07-07: Verifier points, Created/Published in profile, Stats Viewer
+
+### Verifier Gets Points + Completions
+- getRankings() теперь добавляет верифнутые уровни верификатору как completions
+- Верификатор получает полные очки за уровень (как если бы он его прошел)
+- В профиле верификатора его верифнутые уровни отображаются в Completions
+- Дедупликация: если верификатор также есть в records, не добавляется дважды
+
+### Created / Published in Profile
+- getRankings() находит уровни где author совпадает с ником игрока
+- В профиле: новые секции "Challenges Created" и "Challenges Published" с бейджами
+- В Stats Viewer: Created и Published показывают реальные данные (не "None")
+- API /api/profile возвращает verified, created, published массивы
+
+### Stats Viewer
+- Created и Published секции показывают реальные уровни
+- Verified показывает позицию уровня (#N Name)
+
 ## [0.7.0] — 2026-07-07: Cloudflare Pages deployment support
 
 ### Cloudflare Pages Compatibility

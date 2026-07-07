@@ -165,7 +165,51 @@ function PlayerDetail({ player, rank, challenges }) {
                 href={`/level/challenge/${c.id}`}
                 className="cg-badge bg-cg-surface-2 border border-cg-border text-cg-white-dim hover:border-cg-orange/40 hover:text-cg-white transition-colors"
               >
-                {c.name}
+                #{c.position} {c.name}
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-cg-white-dim">None</p>
+        )}
+      </div>
+
+      {/* Created */}
+      <div className="p-4 sm:p-5 border-b border-cg-border">
+        <h3 className="text-[10px] font-semibold text-cg-orange uppercase tracking-wider mb-2">
+          Challenges Created ({player.created?.length || 0})
+        </h3>
+        {player.created?.length > 0 ? (
+          <div className="flex flex-wrap gap-1.5">
+            {player.created.map((c, idx) => (
+              <Link
+                key={idx}
+                href={`/level/challenge/${c.challengeId}`}
+                className="cg-badge bg-cg-surface-2 border border-cg-border text-cg-white-dim hover:border-cg-orange/40 hover:text-cg-white transition-colors"
+              >
+                #{c.position} {c.challengeName}
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-cg-white-dim">None</p>
+        )}
+      </div>
+
+      {/* Published */}
+      <div className="p-4 sm:p-5 border-b border-cg-border">
+        <h3 className="text-[10px] font-semibold text-cg-orange uppercase tracking-wider mb-2">
+          Challenges Published ({player.published?.length || 0})
+        </h3>
+        {player.published?.length > 0 ? (
+          <div className="flex flex-wrap gap-1.5">
+            {player.published.map((c, idx) => (
+              <Link
+                key={idx}
+                href={`/level/challenge/${c.challengeId}`}
+                className="cg-badge bg-cg-surface-2 border border-cg-border text-cg-white-dim hover:border-cg-orange/40 hover:text-cg-white transition-colors"
+              >
+                #{c.position} {c.challengeName}
               </Link>
             ))}
           </div>
@@ -178,11 +222,19 @@ function PlayerDetail({ player, rank, challenges }) {
       <div className="grid grid-cols-2 gap-px" style={{ backgroundColor: "var(--cg-border)" }}>
         <div className="bg-cg-surface p-4">
           <h3 className="text-[10px] font-semibold text-cg-orange uppercase tracking-wider mb-1">Created</h3>
-          <p className="text-sm text-cg-white-dim">None</p>
+          {player.created?.length > 0 ? (
+            <p className="text-sm text-cg-white">{player.created.length}</p>
+          ) : (
+            <p className="text-sm text-cg-white-dim">None</p>
+          )}
         </div>
         <div className="bg-cg-surface p-4">
           <h3 className="text-[10px] font-semibold text-cg-orange uppercase tracking-wider mb-1">Published</h3>
-          <p className="text-sm text-cg-white-dim">None</p>
+          {player.published?.length > 0 ? (
+            <p className="text-sm text-cg-white">{player.published.length}</p>
+          ) : (
+            <p className="text-sm text-cg-white-dim">None</p>
+          )}
         </div>
       </div>
     </div>

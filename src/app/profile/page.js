@@ -157,7 +157,7 @@ export default function ProfilePage() {
       {/* ── Completions ── */}
       <div className="cg-card mb-6 overflow-hidden">
         <div className="px-5 py-3 border-b-2 border-cg-border">
-          <h3 className="text-sm font-bold text-cg-white">Completions</h3>
+          <h3 className="text-sm font-bold text-cg-white">Completions ({stats?.completions?.length || 0})</h3>
         </div>
         {stats?.completions?.length ? (
           <div className="divide-y" style={{ borderColor: "color-mix(in srgb, var(--cg-border) 30%, transparent)" }}>
@@ -185,6 +185,57 @@ export default function ProfilePage() {
           </div>
         )}
       </div>
+
+      {/* ── Verified ── */}
+      {stats?.verified?.length > 0 && (
+        <div className="cg-card mb-6 overflow-hidden">
+          <div className="px-5 py-3 border-b-2 border-cg-border">
+            <h3 className="text-sm font-bold text-cg-white">Challenges Verified ({stats.verified.length})</h3>
+          </div>
+          <div className="p-4 flex flex-wrap gap-1.5">
+            {stats.verified.map((c, idx) => (
+              <Link key={idx} href={`/level/challenge/${c.challengeId}`}
+                className="cg-badge bg-cg-surface-2 border-2 border-cg-border text-cg-white-dim hover:border-cg-orange/40 hover:text-cg-white transition-colors">
+                #{c.position} {c.challengeName}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── Created ── */}
+      {stats?.created?.length > 0 && (
+        <div className="cg-card mb-6 overflow-hidden">
+          <div className="px-5 py-3 border-b-2 border-cg-border">
+            <h3 className="text-sm font-bold text-cg-white">Challenges Created ({stats.created.length})</h3>
+          </div>
+          <div className="p-4 flex flex-wrap gap-1.5">
+            {stats.created.map((c, idx) => (
+              <Link key={idx} href={`/level/challenge/${c.challengeId}`}
+                className="cg-badge bg-cg-surface-2 border-2 border-cg-border text-cg-white-dim hover:border-cg-orange/40 hover:text-cg-white transition-colors">
+                #{c.position} {c.challengeName}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── Published ── */}
+      {stats?.published?.length > 0 && (
+        <div className="cg-card mb-6 overflow-hidden">
+          <div className="px-5 py-3 border-b-2 border-cg-border">
+            <h3 className="text-sm font-bold text-cg-white">Challenges Published ({stats.published.length})</h3>
+          </div>
+          <div className="p-4 flex flex-wrap gap-1.5">
+            {stats.published.map((c, idx) => (
+              <Link key={idx} href={`/level/challenge/${c.challengeId}`}
+                className="cg-badge bg-cg-surface-2 border-2 border-cg-border text-cg-white-dim hover:border-cg-orange/40 hover:text-cg-white transition-colors">
+                #{c.position} {c.challengeName}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* ── Record Status (private) ── */}
       <div className="cg-card overflow-hidden">

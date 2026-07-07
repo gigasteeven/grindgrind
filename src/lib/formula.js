@@ -78,39 +78,78 @@ export function getRankings(allChallenges) {
     positions[c.id] = i + 1;
   });
 
-  // Aggregate records per player (case-insensitive)
+  // Helper to get or create player entry
+  function getOrCreate(usernameRaw) {
+    const key = usernameRaw.toLowerCase();
+    if (!playerMap[key]) {
+      playerMap[key] = {
+        username: usernameRaw,
+        score: 0,
+        completions: [],
+        verified: [],
+        created: [],
+        published: [],
+        hardest: null,
+        hardestPosition: Infinity,
+      };
+    }
+    return playerMap[key];
+  }
+
+  // Helper to add a completion (deduplicated by challengeId)
+  function addCompletion(player, challenge, position, points) {
+    // Don't add duplicates
+    if (player.completions.some(c => c.challengeId === challenge.id)) return;
+    player.completions.push({
+      challengeId: challenge.id,
+      challengeName: challenge.name,
+      position,
+      points,
+      link: challenge.verification || "",
+    });
+    player.score += points;
+    if (position < player.hardestPosition) {
+      player.hardestPosition = position;
+      player.hardest = challenge.name;
+    }
+  }
+
   allChallenges.forEach((challenge, index) => {
     const position = index + 1;
     const points = calculatePoints(position, maxPos);
 
+    // 1. Records (100% completions)
     challenge.records.forEach((record) => {
       if (record.percent !== 100) return;
+      const player = getOrCreate(record.user);
+      addCompletion(player, challenge, position, points);
+    });
 
-      const usernameKey = record.user.toLowerCase();
-      if (!playerMap[usernameKey]) {
-        playerMap[usernameKey] = {
-          username: record.user, // keep original casing from first occurrence
-          score: 0,
-          completions: [],
-          hardest: null,
-          hardestPosition: Infinity,
-        };
-      }
-
-      playerMap[usernameKey].score += points;
-      playerMap[usernameKey].completions.push({
+    // 2. Verifier gets the challenge as a completion + full points
+    if (challenge.verifier) {
+      const verifier = getOrCreate(challenge.verifier);
+      verifier.verified.push({
         challengeId: challenge.id,
         challengeName: challenge.name,
         position,
-        points,
-        link: record.link,
       });
+      addCompletion(verifier, challenge, position, points);
+    }
 
-      if (position < playerMap[usernameKey].hardestPosition) {
-        playerMap[usernameKey].hardestPosition = position;
-        playerMap[usernameKey].hardest = challenge.name;
-      }
-    });
+    // 3. Author = Created/Published
+    if (challenge.author) {
+      const author = getOrCreate(challenge.author);
+      author.created.push({
+        challengeId: challenge.id,
+        challengeName: challenge.name,
+        position,
+      });
+      author.published.push({
+        challengeId: challenge.id,
+        challengeName: challenge.name,
+        position,
+      });
+    }
   });
 
   // Sort by score descending

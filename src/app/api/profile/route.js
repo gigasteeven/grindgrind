@@ -58,6 +58,9 @@ export async function GET(request) {
     completions: rankEntry?.completions || [],
     hardest: rankEntry?.hardest || null,
     hardestPosition: rankEntry?.hardestPosition || null,
+    verified: rankEntry?.verified || [],
+    created: rankEntry?.created || [],
+    published: rankEntry?.published || [],
     recordStatuses,
   });
 }
