@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+export const runtime = "edge";
 import { getChallengeList, getPlatformerList } from "@/lib/redis";
 
 export async function GET(request) {

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+export const runtime = "edge";
 import { verifyToken } from "@/lib/auth";
 import { redis, KEYS, addAdminLog, getUser } from "@/lib/redis";
 

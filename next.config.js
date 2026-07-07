@@ -1,9 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Cloudflare Pages doesn't support next/image optimizer
   images: {
-    remotePatterns: [
-      { protocol: "https", hostname: "**" },
-    ],
+    unoptimized: true,
+  },
+  // Required for Cloudflare Pages
+  experimental: {
+    runtime: "nodejs",
   },
 };
 

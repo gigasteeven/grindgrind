@@ -1,5 +1,17 @@
 # Changelog — ChallengeGrind
 
+## [0.7.0] — 2026-07-07: Cloudflare Pages deployment support
+
+### Cloudflare Pages Compatibility
+- `next.config.js`: images.unoptimized = true (CF Pages не поддерживает next/image optimizer)
+- `wrangler.toml`: конфигурация для Cloudflare Pages с nodejs_compat флагом
+- Все API routes: `export const runtime = "edge"` для Cloudflare Workers
+- `package.json`: добавлены @cloudflare/next-on-pages и wrangler
+- Скрипты: `pages:build` и `pages:deploy` для деплоя через wrangler
+- `DEPLOY.md`: инструкция по деплою на Cloudflare Pages
+- bcryptjs (pure JS) уже используется — работает на edge
+- Upstash Redis — совместим с Cloudflare edge
+
 ## [0.6.0] — 2026-07-07: CRITICAL security fix — server-side auth verification
 
 ### Security Fix: localStorage isAdmin bypass

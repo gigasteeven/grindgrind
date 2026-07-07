@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+export const runtime = "edge";
 import { verifyToken } from "@/lib/auth";
 import { getChallengeList, getUser, getPlayerPendingRecords } from "@/lib/redis";
 import { getRankings } from "@/lib/formula";

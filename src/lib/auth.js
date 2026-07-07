@@ -11,7 +11,6 @@ const JWT_SECRET = process.env.JWT_SECRET || "challengegrind_secret_key_2026";
 export async function verifyCaptcha(token) {
   const secretKey = process.env.TURNSTILE_SECRET_KEY;
   if (!secretKey || secretKey === "YOUR_CLOUDFLARE_SECRET_KEY") {
-    // Dev mode — skip captcha
     return { success: true };
   }
 
@@ -31,13 +30,11 @@ export async function verifyCaptcha(token) {
  * Register a new player.
  */
 export async function registerPlayer({ username, password, country, captchaToken }) {
-  // Verify captcha
   const captcha = await verifyCaptcha(captchaToken);
   if (!captcha.success) {
     return { error: "Captcha verification failed" };
   }
 
-  // Validate
   if (!username || username.length < 3 || username.length > 20) {
     return { error: "Username must be 3-20 characters" };
   }
@@ -45,16 +42,13 @@ export async function registerPlayer({ username, password, country, captchaToken
     return { error: "Password must be at least 4 characters" };
   }
 
-  // Check if user exists (case-insensitive)
   const existing = await getUser(username);
   if (existing) {
     return { error: "Username already taken" };
   }
 
-  // Hash password
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  // Create user
   const user = {
     username,
     password: hashedPassword,
@@ -66,7 +60,6 @@ export async function registerPlayer({ username, password, country, captchaToken
 
   await redis.set(`${KEYS.userPrefix}${username.toLowerCase()}`, user);
 
-  // Generate token
   const token = jwt.sign({ username, isAdmin: false }, JWT_SECRET, { expiresIn: "7d" });
   return { token, user: { username, country: user.country, isAdmin: false } };
 }
@@ -75,7 +68,6 @@ export async function registerPlayer({ username, password, country, captchaToken
  * Login a player.
  */
 export async function loginPlayer({ username, password, captchaToken }) {
-  // Verify captcha
   const captcha = await verifyCaptcha(captchaToken);
   if (!captcha.success) {
     return { error: "Captcha verification failed" };
@@ -111,14 +103,4 @@ export function verifyToken(token) {
   } catch {
     return null;
   }
-}
-
-/**
- * Get auth context from Next.js request cookies/headers.
- */
-export function getAuthContext(request) {
-  const authHeader = request.headers.get("authorization");
-  const token = authHeader?.replace("Bearer ", "");
-  if (!token) return null;
-  return verifyToken(token);
 }

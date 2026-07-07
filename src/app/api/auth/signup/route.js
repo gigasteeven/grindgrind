@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+export const runtime = "edge";
 import { registerPlayer } from "@/lib/auth";
 import { redis, KEYS } from "@/lib/redis";
 
