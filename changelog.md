@@ -1,5 +1,47 @@
 # Changelog — ChallengeGrind
 
+## [0.3.0] — 2026-07-07: Complete CSS overhaul + Stats Viewer redesign
+
+### CSS Overhaul
+- Полностью переписан globals.css: чище компоненты, меньше визуального шума
+- `.cg-card` — без паддинга по умолчанию (контролируется местами)
+- `.cg-card-hover` — для интерактивных карточек с lift эффектом
+- `.cg-rank` система бейджей: top1 (золото), top3 (оранжевый), top5, top10, default
+- Убраны лишние тени и скругления
+
+### Stats Viewer — полная переделка
+- **Двухпанельный layout** (как на референсе): слева список игроков, справа детали
+- **Поиск** по имени игрока
+- **Пагинация** (Previous / Next) по 25 игроков на страницу
+- **Левая панель**: ранг, ник, completions, флаг, очки
+- **Правая панель**:
+  - Имя игрока + флаг
+  - Rank и Score
+  - ChallengeGrind Stats (Top 5 / Top 15 / Extended)
+  - Hardest Challenge
+  - Challenges Completed (список бейджей со ссылками)
+  - Challenges Verified
+  - Created / Published
+- Вместо "Demons" → "Challenges" везде
+
+### Level Detail — редизайн
+- Градиентный accent bar сверху
+- Бейдж позиции с цветовым кодированием
+- Info grid 2×4 (Level ID, Password, Qualify %, Verifier)
+- Records таблица: #, Holder, Flag, Pre, 100%, Proof
+- Счётчик: "X registered, Y are 100%"
+
+### Challenge Card — редизайн
+- Минималистичный дизайн: бейдж позиции + имя + verifier + records + points
+- Цвет бейджа зависит от позиции
+
+### Profile — редизайн
+- Баннер с градиентом
+- Флаг страны как аватар (flagcdn.com SVG)
+- 3 карточки статистики (Score, Completions, Hardest)
+- Completions список с сортировкой по позиции
+- Record Status (приватная секция)
+
 ## [0.2.0] — 2026-07-07: Bug fixes & Profile redesign
 
 ### Bug Fixes

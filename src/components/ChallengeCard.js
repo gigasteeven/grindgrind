@@ -2,36 +2,25 @@ import Link from "next/link";
 
 /**
  * Rectangular level card for list pages.
- * Shows #position, Published date, Points, and record count.
+ * Clean, minimal design with position badge and key stats.
  */
 export default function ChallengeCard({ challenge, position, points, type = "challenge" }) {
   const recordCount = challenge.records?.length || 0;
   const href = `/level/${type}/${challenge.id}`;
 
-  // Tier color based on position
-  const tierColor =
-    position <= 5 ? "text-cg-yellow" :
-    position <= 15 ? "text-cg-orange-bright" :
-    position <= 50 ? "text-cg-orange" :
-    "text-cg-white-dim";
-
-  const tierBg =
-    position <= 5 ? "bg-cg-yellow/10 border-cg-yellow/30" :
-    position <= 15 ? "bg-cg-orange-bright/10 border-cg-orange-bright/30" :
-    position <= 50 ? "bg-cg-orange/10 border-cg-orange/30" :
-    "bg-cg-brown border-cg-border";
+  const rankClass =
+    position === 1 ? "cg-rank-top1" :
+    position <= 3 ? "cg-rank-top3" :
+    position <= 5 ? "cg-rank-top5" :
+    position <= 10 ? "cg-rank-top10" :
+    "cg-rank-default";
 
   return (
-    <Link
-      href={href}
-      className="cg-card block group"
-    >
-      <div className="flex items-center gap-4">
+    <Link href={href} className="cg-card-hover block group">
+      <div className="flex items-center gap-4 p-4">
         {/* Position badge */}
-        <div className={`shrink-0 w-14 h-14 rounded-lg border flex items-center justify-center ${tierBg}`}>
-          <span className={`text-xl font-extrabold ${tierColor}`}>
-            #{position}
-          </span>
+        <div className={`cg-rank w-12 h-12 text-lg ${rankClass}`}>
+          #{position}
         </div>
 
         {/* Level info */}
@@ -39,40 +28,29 @@ export default function ChallengeCard({ challenge, position, points, type = "cha
           <h3 className="text-base font-semibold text-cg-white truncate group-hover:text-cg-orange transition-colors duration-200">
             {challenge.name}
           </h3>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1">
+          <div className="flex items-center gap-3 mt-1">
             <span className="text-xs text-cg-white-dim">
-              By {challenge.author || "Unknown"}
+              {challenge.verifier || "—"}
             </span>
+            <span className="text-xs text-cg-white-dim/40">·</span>
             <span className="text-xs text-cg-white-dim">
-              Verifier: <span className="text-cg-orange-bright">{challenge.verifier || "—"}</span>
+              {recordCount} records
             </span>
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="hidden sm:flex flex-col items-end gap-1 shrink-0">
-          <div className="flex items-center gap-1.5">
-            <span className="text-xs text-cg-white-dim">Points:</span>
-            <span className="text-sm font-bold text-cg-yellow">{points}</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="text-xs text-cg-white-dim">Records:</span>
-            <span className="text-sm font-medium text-cg-white">{recordCount}</span>
-          </div>
+        {/* Points */}
+        <div className="text-right shrink-0">
+          <p className="text-lg font-bold text-cg-yellow">{points}</p>
+          <p className="text-[10px] text-cg-white-dim uppercase tracking-wider">pts</p>
         </div>
 
         {/* Arrow */}
-        <div className="shrink-0 text-cg-white-dim group-hover:text-cg-orange transition-colors duration-200">
+        <div className="shrink-0 text-cg-white-dim/30 group-hover:text-cg-orange transition-colors duration-200">
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
           </svg>
         </div>
-      </div>
-
-      {/* Mobile stats */}
-      <div className="flex sm:hidden items-center gap-4 mt-3 pt-3 border-t border-cg-border">
-        <span className="text-xs text-cg-white-dim">Points: <span className="text-cg-yellow font-bold">{points}</span></span>
-        <span className="text-xs text-cg-white-dim">Records: <span className="text-cg-white font-medium">{recordCount}</span></span>
       </div>
     </Link>
   );
