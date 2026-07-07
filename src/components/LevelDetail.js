@@ -69,7 +69,7 @@ export default function LevelDetail({ challenge, position, points, type }) {
 
       {/* ── Level Header (glass) ── */}
       <div className="cg-glass mb-4 sm:mb-6 overflow-hidden">
-        {/* Top accent bar */}
+        {/* Top accent bar — uses CSS variables for theme support */}
         <div className="h-1" style={{ backgroundImage: "linear-gradient(to right, var(--cg-accent-from), var(--cg-accent-to))" }} />
 
         <div className="p-4 sm:p-6">

@@ -8,7 +8,14 @@ export default function HomePage() {
         <div className="animate-fade-in">
           <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tight">
             <span className="text-cg-white">Challenge</span>
-            <span className="bg-gradient-to-r from-cg-orange via-cg-orange-bright to-cg-yellow bg-clip-text text-transparent">
+            <span
+              style={{
+                backgroundImage: "linear-gradient(to right, var(--cg-accent-from), var(--cg-accent-to))",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
               Grind
             </span>
           </h1>

@@ -1,5 +1,17 @@
 # Changelog — ChallengeGrind
 
+## [0.4.1] — 2026-07-07: Fix theme colors on home page, footer, accent bar
+
+### Bug Fixes
+- **Home page "Grind" text**: теперь использует CSS переменные (--cg-accent-from/to) вместо статичных Tailwind классов — меняет цвет при смене темы
+- **Footer "Grind" text**: та же починка
+- **Accent bar на странице уровня**: уже использовал CSS переменные, подтверждено
+
+### Card Redesign (списки)
+- Карточки переделаны: позиция, тире, название уровня, "published by"
+- Минималистичный дизайн как на референсе
+- Stats справа на десктопе, компактно на мобиле
+
 ## [0.4.0] — 2026-07-07: Theme system, card redesign, glass UI, mobile support, user management
 
 ### Theme System
