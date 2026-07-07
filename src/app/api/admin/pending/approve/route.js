@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { verifyToken } from "@/lib/auth";
-import { redis, KEYS, addAdminLog, getPendingRecords, removePendingRecord, getChallenge } from "@/lib/redis";
+import { redis, KEYS, addAdminLog, getPendingRecords, updatePendingRecordStatus, getChallenge } from "@/lib/redis";
 
 export async function POST(request) {
   const authHeader = request.headers.get("authorization");
@@ -32,8 +32,8 @@ export async function POST(request) {
     await redis.set(`${KEYS.challengePrefix}${record.challengeId}`, challenge);
   }
 
-  // Remove from pending
-  await removePendingRecord(id);
+  // Mark as approved (keep in list so player can see status)
+  await updatePendingRecordStatus(id, "approved", "");
 
   await addAdminLog({
     admin: decoded.username,

@@ -1,5 +1,40 @@
 # Changelog — ChallengeGrind
 
+## [0.2.0] — 2026-07-07: Bug fixes & Profile redesign
+
+### Bug Fixes
+- **Critical Redis fix**: `getChallengeList()`, `getPlatformerList()`, `getAdminLogs()`, `getPendingRecords()` — изменены с `lrange` (Redis list) на `get` + `JSON.parse` (Redis string), чтобы совпадать с seed.js который использует `set()`. Это исправляло `WRONGTYPE` ошибку на Stats Viewer, Challenge List и Platformer List.
+- **Navbar auth state**: Navbar теперь проверяет `localStorage` на наличие токена и показывает username + Logout вместо Sign Up после регистрации.
+- **Profile redirect**: При истёкшем токене профиль редиректит на `/auth/signup` вместо пустого экрана.
+
+### Profile Redesign
+- **Country flag avatar**: Вместо буквенной аватарки — SVG флаг страны игрока из `flagcdn.com`
+- **Banner gradient**: Добавлен градиентный баннер в шапке профиля
+- **Stats cards**: Иконки для Total Score, Completions, Hardest
+- **Record Status section**: Внизу профиля — статус всех отправленных рекордов (pending/approved/rejected). Виден только самому игроку. При отказе показывается причина.
+- **Owner badge**: 👑 Owner для владельца, 🛡️ Admin для обычных админов
+
+### Level Detail Redesign (по образцу)
+- **Gradient position badge**: Цветовой градиент зависит от позиции (#1-5 жёлтый, #6-15 оранжевый, и т.д.)
+- **Info grid**: Level ID, Password, Qualify %, Verifier — в сетке 2x4 карточек
+- **Records table**: Полная таблица с колонками #, Holder, Flag, Pre, 100%, Time (для платформеров), Proof
+- **Records header**: Показывает общее количество рекордов и сколько из них 100%
+- **Verification video button**: Кнопка для просмотра верификационного видео
+
+### Admin Panel
+- **Staff avatars**: В StaffTab добавлена возможность ставить URL аватарки для каждого стаффа + поля для соцсетей (Telegram, Discord, YouTube)
+- **Reject with reason**: При отказе рекорда админ вводит причину, которая видна игроку в профиле
+- **Pending status display**: Одобренные/отклонённые рекорды показываются со статусом в админ панели
+
+### Home Page
+- **Removed 3 feature cards**: Убраны карточки "Challenge List", "Stats Viewer", "Submit Records" с главной — оставлен только hero с заголовком и кнопками
+
+### API Changes
+- `GET /api/profile` — теперь возвращает `recordStatuses` (массив статусов рекордов игрока)
+- `POST /api/admin/pending/reject` — принимает `reason` поле
+- `POST /api/admin/pending/approve` — помечает рекорд как approved вместо удаления
+- Новые функции в redis.js: `getPlayerPendingRecords()`, `updatePendingRecordStatus()`
+
 ## [0.1.0] — 2026-07-07: Initial Project Skeleton
 
 ### Проект
@@ -18,44 +53,35 @@
 - Иконка сайта: ico.png в navbar
 
 ### Страницы
-1. **Home** (`/`) — лендинг с hero-секцией и карточками
-2. **Challenge List** (`/list/challenge`) — список челленджей с прямоугольными карточками (#позиция, Verifier, Points, Records)
+1. **Home** (`/`) — лендинг с hero-секцией
+2. **Challenge List** (`/list/challenge`) — список челленджей с прямоугольными карточками
 3. **Platformer List** (`/list/platformer`) — аналогично, но в Records отображается время
-4. **Level Detail** (`/level/[type]/[id]`) — страница уровня: Verifier, ID, Tags, Password, Verification Video, Records (ник, флаг, кнопка видео)
+4. **Level Detail** (`/level/[type]/[id]`) — страница уровня: Verifier, ID, Tags, Password, Records
 5. **Rules** (`/guidelines/rules`) — список правил (редактируется из Admin Panel)
 6. **Level Submission** (`/guidelines/submission`) — правила сабмита (редактируется из Admin Panel)
 7. **Staff** (`/other/staff`) — карточки модераторов с аватарами и соцсетями (редактируется из Admin Panel)
 8. **Social Media** (`/other/social`) — Telegram, Discord, YouTube иконки (редактируется из Admin Panel)
-9. **Stats Viewer** (`/stats`) — рейтинг игроков: топ-3 подиум + таблица (позиция, ник, очки, completions, hardest). Вместо Demons — Challenges
-10. **Submit Records** (`/submit`) — форма отправки рекорда: выбор челленджа, видео, Raw Footage (опционально), время (для платформеров), процент, страна
-11. **Auth** (`/auth/signup`) — регистрация/авторизация с переключением табов, Cloudflare Turnstile капча (placeholder)
-12. **Profile** (`/profile`) — личный кабинет: аватар, ник, флаг, позиция в рейтинге, Total Score, Completions, Hardest, список прохождений
-13. **Admin Panel** (`/admin`) — авторизация + вкладки:
-    - Challenges: перемещение позиций, удаление
-    - Pending Records: одобрение/отклонение сабмитов
-    - Rules: редактирование правил
-    - Submission: редактирование правил сабмита
-    - Staff: редактирование списка модераторов
-    - Admins: добавление/удаление админов (только owner)
-    - Logs: логи действий администраторов
+9. **Stats Viewer** (`/stats`) — рейтинг игроков: топ-3 подиум + таблица
+10. **Submit Records** (`/submit`) — форма отправки рекорда с Raw Footage (опционально)
+11. **Auth** (`/auth/signup`) — регистрация/авторизация с Cloudflare Turnstile
+12. **Profile** (`/profile`) — личный кабинет: флаг, ранг, очки, прохождения, статус рекордов
+13. **Admin Panel** (`/admin`) — вкладки: Challenges, Pending Records, Rules, Submission, Staff, Admins, Logs
 
 ### База данных (Upstash Redis)
-- URL: https://busy-macaque-78789.upstash.io
 - Структура ключей:
-  - `challenge:list` — упорядоченный список ID челленджей
+  - `challenge:list` — JSON массив ID челленджей
   - `challenge:{id}` — JSON с данными уровня
   - `platformer:list` / `platformer:{id}` — аналогично для платформеров
   - `user:{username}` — JSON с данными пользователя
   - `admins:list` — список админов
-  - `admin:logs` — логи действий
-  - `records:pending` — ожидающие рекорды
+  - `admin:logs` — JSON массив логов
+  - `records:pending` — JSON массив ожидающих рекордов
   - `content:rules`, `content:submission`, `content:staff`, `content:social` — редактируемый контент
 
 ### Формула очков (formula.md)
 - Реализована в `src/lib/formula.js`
 - Учитывается ТОЛЬКО 100% прохождение (по требованию)
 - Кусочно-заданная функция P(h) от позиции h
-- Глобальный рейтинг: сумма очков за все 100% прохождения, сортировка по убыванию
 
 ### Импорт данных (merge папка)
 - 24 челленджа импортированы из merge/_list.json
@@ -64,68 +90,10 @@
 - Дефолтный админ: admin / grind (owner)
 
 ### Авторизация
-- JWT токены (7 дней)
-- Пароли хешируются bcrypt
-- Cloudflare Turnstile капча (пропускается в dev режиме)
+- JWT токены (7 дней), bcrypt, Cloudflare Turnstile
 - httpOnly cookies для токенов
 - Только owner (admin) может добавлять других админов
 
-### Безопасность
-- Пароли не возвращаются в API ответах
-- JWT в httpOnly cookies
-- Проверка admin-прав на каждом admin API endpoint
-- Логи всех admin-действий
-
 ### Skills применены
-- **skill-frontend-2.md** (Tailwind CSS архитектор): система отступов, повторяемые компоненты (.cg-card, .cg-btn, .cg-input), адаптивность (mobile/tablet/desktop), hover/focus состояния
-- **skill-frontend-6.md** (Плавная CSS-анимация): только transform и opacity, cubic-bezier кривые, prefers-reduced-motion поддержка, will-change hints
-
-### Технологии
-- Next.js 14 (App Router)
-- Tailwind CSS 3.4
-- @upstash/redis
-- bcryptjs + jsonwebtoken
-- Cloudflare Turnstile (готово к подключению)
-
-### Файлы
-```
-src/
-├── app/
-│   ├── layout.js          # Root layout (Navbar + Footer)
-│   ├── page.js            # Home
-│   ├── globals.css        # Tailwind + кастомные стили
-│   ├── list/challenge/    # Challenge List
-│   ├── list/platformer/   # Platformer List
-│   ├── level/[type]/[id]/ # Level Detail
-│   ├── guidelines/rules/  # Rules
-│   ├── guidelines/submission/ # Level Submission
-│   ├── other/staff/       # Staff
-│   ├── other/social/      # Social Media
-│   ├── stats/             # Stats Viewer
-│   ├── submit/            # Submit Records
-│   ├── auth/signup/       # Auth (login/signup)
-│   ├── profile/           # Player Profile
-│   ├── admin/             # Admin Panel
-│   └── api/
-│       ├── auth/signup/   # Register API
-│       ├── auth/login/    # Login API
-│       ├── list/          # List API
-│       ├── submit/        # Submit Record API
-│       ├── profile/       # Profile API
-│       └── admin/
-│           ├── challenges/    # List/Move/Delete
-│           ├── pending/       # List/Approve/Reject
-│           ├── content/       # Get/Set content
-│           ├── admins/        # List/Add/Delete
-│           └── logs/          # Get/Add logs
-├── components/
-│   ├── Navbar.js          # Sticky navbar с dropdowns
-│   ├── Footer.js          # Footer
-│   ├── ChallengeCard.js   # Карточка уровня
-│   └── LevelDetail.js     # Детальная страница уровня
-└── lib/
-    ├── redis.js           # Upstash Redis client + helpers
-    ├── formula.js         # Формула очков
-    ├── auth.js            # Auth helpers (register, login, captcha)
-    └── seed.js            # Seed script для импорта данных
-```
+- **skill-frontend-2.md** (Tailwind CSS архитектор): система компонентов, адаптивность
+- **skill-frontend-6.md** (Плавная CSS-анимация): transform/opacity, cubic-bezier, prefers-reduced-motion

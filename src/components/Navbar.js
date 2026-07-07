@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 /* ── Dropdown item ── */
 function NavDropdown({ label, items }) {
@@ -62,7 +62,7 @@ function NavDropdown({ label, items }) {
 }
 
 /* ── Mobile menu ── */
-function MobileMenu() {
+function MobileMenu({ isLoggedIn, username, isAdmin, onLogout }) {
   const [open, setOpen] = useState(false);
 
   const sections = [
@@ -140,13 +140,40 @@ function MobileMenu() {
               >
                 Submit Records
               </Link>
-              <Link
-                href="/auth/signup"
-                className="block py-2 text-sm font-semibold text-cg-orange"
-                onClick={() => setOpen(false)}
-              >
-                Sign Up
-              </Link>
+              {isLoggedIn ? (
+                <>
+                  <Link
+                    href="/profile"
+                    className="block py-1.5 text-sm font-medium text-cg-white"
+                    onClick={() => setOpen(false)}
+                  >
+                    Profile ({username})
+                  </Link>
+                  {isAdmin && (
+                    <Link
+                      href="/admin"
+                      className="block py-1.5 text-sm font-medium text-cg-orange"
+                      onClick={() => setOpen(false)}
+                    >
+                      Admin Panel
+                    </Link>
+                  )}
+                  <button
+                    onClick={() => { onLogout(); setOpen(false); }}
+                    className="block py-1.5 text-sm font-medium text-red-400"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <Link
+                  href="/auth/signup"
+                  className="block py-2 text-sm font-semibold text-cg-orange"
+                  onClick={() => setOpen(false)}
+                >
+                  Sign Up
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -156,6 +183,41 @@ function MobileMenu() {
 }
 
 export default function Navbar() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const token = localStorage.getItem("token");
+      const user = localStorage.getItem("user");
+      if (token && user) {
+        const userData = JSON.parse(user);
+        setIsLoggedIn(true);
+        setUsername(userData.username);
+        setIsAdmin(userData.isAdmin || false);
+      } else {
+        setIsLoggedIn(false);
+        setUsername("");
+        setIsAdmin(false);
+      }
+    };
+    checkAuth();
+    // Re-check on route change
+    window.addEventListener("storage", checkAuth);
+    return () => window.removeEventListener("storage", checkAuth);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setIsLoggedIn(false);
+    setUsername("");
+    setIsAdmin(false);
+    router.push("/");
+  };
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-40 border-b border-cg-border bg-cg-black/95 backdrop-blur-sm">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -210,13 +272,40 @@ export default function Navbar() {
 
           {/* Right side */}
           <div className="flex items-center gap-3">
-            <Link
-              href="/auth/signup"
-              className="cg-btn cg-btn-primary hidden sm:inline-flex"
-            >
-              Sign Up
-            </Link>
-            <MobileMenu />
+            {isLoggedIn ? (
+              <div className="hidden sm:flex items-center gap-2">
+                <Link
+                  href="/profile"
+                  className="px-3 py-2 text-sm font-medium text-cg-white-dim transition-colors duration-200 hover:text-cg-white"
+                >
+                  {username}
+                </Link>
+                {isAdmin && (
+                  <Link href="/admin" className="cg-btn cg-btn-ghost text-sm">
+                    Admin
+                  </Link>
+                )}
+                <button
+                  onClick={handleLogout}
+                  className="cg-btn px-3 py-2 text-sm border border-red-500/30 text-red-400 hover:bg-red-500/10 rounded-md transition-all duration-200"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link
+                href="/auth/signup"
+                className="cg-btn cg-btn-primary hidden sm:inline-flex"
+              >
+                Sign Up
+              </Link>
+            )}
+            <MobileMenu
+              isLoggedIn={isLoggedIn}
+              username={username}
+              isAdmin={isAdmin}
+              onLogout={handleLogout}
+            />
           </div>
         </div>
       </div>

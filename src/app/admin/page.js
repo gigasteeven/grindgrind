@@ -163,14 +163,14 @@ function PendingTab({ token, log }) {
     }
   };
 
-  const reject = async (record) => {
+  const reject = async (record, reason) => {
     const res = await fetch("/api/admin/pending/reject", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ id: record.id }),
+      body: JSON.stringify({ id: record.id, reason }),
     });
     if (res.ok) {
-      log("Rejected record", { player: record.playerName, challenge: record.challengeId });
+      log("Rejected record", { player: record.playerName, challenge: record.challengeId, reason });
       fetchRecords();
     }
   };
@@ -195,11 +195,25 @@ function PendingTab({ token, log }) {
                 {r.rawFootage && <p>Raw: <a href={r.rawFootage} target="_blank" rel="noopener noreferrer" className="text-cg-orange underline">{r.rawFootage}</a></p>}
                 <p>Percent: {r.percent}% · Type: {r.listType} {r.time && `· Time: ${r.time}`}</p>
                 <p>Submitted: {new Date(r.submittedAt).toLocaleString()}</p>
+                {r.status === "approved" && <p className="text-green-400">✅ Approved</p>}
+                {r.status === "rejected" && <p className="text-red-400">❌ Rejected: {r.reason}</p>}
               </div>
             </div>
-            <div className="flex gap-2 shrink-0">
-              <button onClick={() => approve(r)} className="cg-btn px-3 py-1.5 text-xs border border-green-500/30 text-green-400 hover:bg-green-500/10 rounded-md">Approve</button>
-              <button onClick={() => reject(r)} className="cg-btn px-3 py-1.5 text-xs border border-red-500/30 text-red-400 hover:bg-red-500/10 rounded-md">Reject</button>
+            <div className="flex flex-col gap-2 shrink-0">
+              {r.status === "pending" && (
+                <>
+                  <button onClick={() => approve(r)} className="cg-btn px-3 py-1.5 text-xs border border-green-500/30 text-green-400 hover:bg-green-500/10 rounded-md">Approve</button>
+                  <button
+                    onClick={() => {
+                      const reason = prompt("Reason for rejection (player will see this):");
+                      if (reason !== null) reject(r, reason);
+                    }}
+                    className="cg-btn px-3 py-1.5 text-xs border border-red-500/30 text-red-400 hover:bg-red-500/10 rounded-md"
+                  >
+                    Reject
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -280,28 +294,87 @@ function StaffTab({ token, log }) {
   };
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       {staff.map((member, idx) => (
-        <div key={idx} className="flex gap-2">
-          <input
-            value={member.username || ""}
-            onChange={(e) => { const c = [...staff]; c[idx] = { ...c[idx], username: e.target.value }; setStaff(c); }}
-            className="cg-input flex-1"
-            placeholder="Username"
-          />
-          <input
-            value={member.role || ""}
-            onChange={(e) => { const c = [...staff]; c[idx] = { ...c[idx], role: e.target.value }; setStaff(c); }}
-            className="cg-input w-32"
-            placeholder="Role"
-          />
-          <button onClick={() => setStaff(staff.filter((_, i) => i !== idx))}
-            className="cg-btn px-3 py-1 text-xs border border-red-500/30 text-red-400 rounded-md">Remove</button>
+        <div key={idx} className="cg-card space-y-3">
+          {/* Avatar + username row */}
+          <div className="flex items-center gap-3">
+            {/* Avatar preview */}
+            <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-cg-orange/30 shrink-0 bg-cg-brown flex items-center justify-center">
+              {member.avatar ? (
+                <img src={member.avatar} alt={member.username} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-lg font-bold text-cg-orange">
+                  {(member.username || "?").charAt(0).toUpperCase()}
+                </span>
+              )}
+            </div>
+            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <input
+                value={member.username || ""}
+                onChange={(e) => { const c = [...staff]; c[idx] = { ...c[idx], username: e.target.value }; setStaff(c); }}
+                className="cg-input"
+                placeholder="Username"
+              />
+              <input
+                value={member.role || ""}
+                onChange={(e) => { const c = [...staff]; c[idx] = { ...c[idx], role: e.target.value }; setStaff(c); }}
+                className="cg-input"
+                placeholder="Role (e.g. Owner, Moderator)"
+              />
+            </div>
+            <button onClick={() => setStaff(staff.filter((_, i) => i !== idx))}
+              className="cg-btn px-3 py-1.5 text-xs border border-red-500/30 text-red-400 rounded-md shrink-0">Remove</button>
+          </div>
+
+          {/* Avatar URL */}
+          <div>
+            <label className="block text-xs text-cg-white-dim mb-1">Avatar URL</label>
+            <input
+              value={member.avatar || ""}
+              onChange={(e) => { const c = [...staff]; c[idx] = { ...c[idx], avatar: e.target.value }; setStaff(c); }}
+              className="cg-input"
+              placeholder="https://... (image URL for avatar)"
+            />
+          </div>
+
+          {/* Socials */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <div>
+              <label className="block text-xs text-cg-white-dim mb-1">Telegram</label>
+              <input
+                value={member.socials?.telegram || ""}
+                onChange={(e) => { const c = [...staff]; c[idx] = { ...c[idx], socials: { ...c[idx].socials, telegram: e.target.value } }; setStaff(c); }}
+                className="cg-input"
+                placeholder="https://t.me/..."
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-cg-white-dim mb-1">Discord</label>
+              <input
+                value={member.socials?.discord || ""}
+                onChange={(e) => { const c = [...staff]; c[idx] = { ...c[idx], socials: { ...c[idx].socials, discord: e.target.value } }; setStaff(c); }}
+                className="cg-input"
+                placeholder="Discord invite link"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-cg-white-dim mb-1">YouTube</label>
+              <input
+                value={member.socials?.youtube || ""}
+                onChange={(e) => { const c = [...staff]; c[idx] = { ...c[idx], socials: { ...c[idx].socials, youtube: e.target.value } }; setStaff(c); }}
+                className="cg-input"
+                placeholder="https://youtube.com/..."
+              />
+            </div>
+          </div>
         </div>
       ))}
-      <button onClick={() => setStaff([...staff, { username: "", role: "", avatar: "", socials: {} }])}
-        className="cg-btn cg-btn-ghost text-sm">Add Member</button>
-      <button onClick={save} className="cg-btn cg-btn-primary text-sm">Save Staff</button>
+      <div className="flex gap-2">
+        <button onClick={() => setStaff([...staff, { username: "", role: "", avatar: "", socials: {} }])}
+          className="cg-btn cg-btn-ghost text-sm">Add Member</button>
+        <button onClick={save} className="cg-btn cg-btn-primary text-sm">Save Staff</button>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { verifyToken } from "@/lib/auth";
-import { getChallengeList, getUser } from "@/lib/redis";
+import { getChallengeList, getUser, getPlayerPendingRecords } from "@/lib/redis";
 import { getRankings } from "@/lib/formula";
 
 export async function GET(request) {
@@ -23,14 +23,38 @@ export async function GET(request) {
   const rankEntry = rankings.find(r => r.username === user.username);
   const rank = rankEntry ? rankings.indexOf(rankEntry) + 1 : null;
 
+  // Get player's pending records (for status display)
+  const pendingRecords = await getPlayerPendingRecords(user.username);
+
+  // Map pending records with challenge names
+  const challengeMap = {};
+  challenges.forEach((c, i) => {
+    challengeMap[c.id] = { name: c.name, position: i + 1 };
+  });
+
+  const recordStatuses = pendingRecords.map(r => ({
+    id: r.id,
+    challengeId: r.challengeId,
+    challengeName: challengeMap[r.challengeId]?.name || r.challengeId,
+    challengePosition: challengeMap[r.challengeId]?.position || null,
+    status: r.status || "pending",
+    reason: r.reason || "",
+    submittedAt: r.submittedAt,
+    reviewedAt: r.reviewedAt || null,
+    videoLink: r.videoLink,
+    percent: r.percent,
+  }));
+
   return NextResponse.json({
     username: user.username,
     country: user.country,
     isAdmin: user.isAdmin,
+    isOwner: user.isOwner || false,
     totalScore: rankEntry?.score || 0,
     rank,
     completions: rankEntry?.completions || [],
     hardest: rankEntry?.hardest || null,
     hardestPosition: rankEntry?.hardestPosition || null,
+    recordStatuses,
   });
 }
