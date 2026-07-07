@@ -45,7 +45,7 @@ export async function registerPlayer({ username, password, country, captchaToken
     return { error: "Password must be at least 4 characters" };
   }
 
-  // Check if user exists
+  // Check if user exists (case-insensitive)
   const existing = await getUser(username);
   if (existing) {
     return { error: "Username already taken" };

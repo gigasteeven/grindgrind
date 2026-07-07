@@ -11,6 +11,7 @@ export async function GET(request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // Find user case-insensitively
   const user = await getUser(decoded.username);
   if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -19,11 +20,12 @@ export async function GET(request) {
   const challenges = await getChallengeList();
   const rankings = getRankings(challenges);
 
-  // Find this user in rankings
-  const rankEntry = rankings.find(r => r.username === user.username);
+  // Find this user in rankings (case-insensitive match)
+  const userKey = user.username.toLowerCase();
+  const rankEntry = rankings.find(r => r.username.toLowerCase() === userKey);
   const rank = rankEntry ? rankings.indexOf(rankEntry) + 1 : null;
 
-  // Get player's pending records (for status display)
+  // Get player's pending records (case-insensitive)
   const pendingRecords = await getPlayerPendingRecords(user.username);
 
   // Map pending records with challenge names

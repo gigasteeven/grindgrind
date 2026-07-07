@@ -78,7 +78,7 @@ export function getRankings(allChallenges) {
     positions[c.id] = i + 1;
   });
 
-  // Aggregate records per player
+  // Aggregate records per player (case-insensitive)
   allChallenges.forEach((challenge, index) => {
     const position = index + 1;
     const points = calculatePoints(position, maxPos);
@@ -86,10 +86,10 @@ export function getRankings(allChallenges) {
     challenge.records.forEach((record) => {
       if (record.percent !== 100) return;
 
-      const username = record.user;
-      if (!playerMap[username]) {
-        playerMap[username] = {
-          username,
+      const usernameKey = record.user.toLowerCase();
+      if (!playerMap[usernameKey]) {
+        playerMap[usernameKey] = {
+          username: record.user, // keep original casing from first occurrence
           score: 0,
           completions: [],
           hardest: null,
@@ -97,8 +97,8 @@ export function getRankings(allChallenges) {
         };
       }
 
-      playerMap[username].score += points;
-      playerMap[username].completions.push({
+      playerMap[usernameKey].score += points;
+      playerMap[usernameKey].completions.push({
         challengeId: challenge.id,
         challengeName: challenge.name,
         position,
@@ -106,9 +106,9 @@ export function getRankings(allChallenges) {
         link: record.link,
       });
 
-      if (position < playerMap[username].hardestPosition) {
-        playerMap[username].hardestPosition = position;
-        playerMap[username].hardest = challenge.name;
+      if (position < playerMap[usernameKey].hardestPosition) {
+        playerMap[usernameKey].hardestPosition = position;
+        playerMap[usernameKey].hardest = challenge.name;
       }
     });
   });

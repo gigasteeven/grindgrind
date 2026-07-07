@@ -102,7 +102,7 @@ function AddChallengeForm({ token, log, onAdded }) {
     } else {
       log("Added challenge", { name: form.name, id: form.id });
       setSuccess(`Added "${form.name}" to ${form.listType} list`);
-      setForm({ name: "", id: "", author: "", verifier: "", verification: "", password: "Not Copyable", percentToQualify: 100, listType: "challenge", tags: "" });
+      setForm({ name: "", id: "", author: "", verifier: "", verification: "", password: "Not Copyable", percentToQualify: 100, listType: "challenge", tags: "", position: "" });
       setTimeout(() => setSuccess(""), 3000);
       onAdded();
     }
@@ -132,8 +132,9 @@ function AddChallengeForm({ token, log, onAdded }) {
         <input className="cg-input" placeholder="Verification Video URL" value={form.verification} onChange={e => setForm({ ...form, verification: e.target.value })} />
         <input className="cg-input" placeholder="Password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} />
         <input className="cg-input" type="number" placeholder="Qualify %" value={form.percentToQualify} onChange={e => setForm({ ...form, percentToQualify: e.target.value })} />
-        <input className="cg-input" placeholder="Tags (comma separated)" value={form.tags} onChange={e => setForm({ ...form, tags: e.target.value })} />
+        <input className="cg-input" type="number" placeholder="Position (1 = top, empty = end)" value={form.position} onChange={e => setForm({ ...form, position: e.target.value })} />
       </div>
+      <input className="cg-input" placeholder="Tags (comma separated)" value={form.tags} onChange={e => setForm({ ...form, tags: e.target.value })} />
 
       {error && <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/30 rounded-md px-3 py-2">{error}</div>}
       {success && <div className="text-sm text-green-400 bg-green-500/10 border border-green-500/30 rounded-md px-3 py-2">{success}</div>}

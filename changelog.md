@@ -1,5 +1,32 @@
 # Changelog — ChallengeGrind
 
+## [0.5.1] — 2026-07-07: Records fix, case-insensitive nicks, position on add, auth bug fixes
+
+### Records Table
+- Убрана надпись "100%" — только зелёная галочка ✓
+- Заголовок колонки изменён с "100%" на "✓"
+- Для процентов < 100 показывается процент цифрами
+
+### Case-Insensitive Usernames
+- getRankings() теперь группирует по username.toLowerCase()
+- kunakov и Kunakov засчитываются как один игрок
+- Отображается оригинальный ник (первый найденный)
+
+### Admin: Position When Adding Level
+- Поле Position в форме добавления уровня
+- Уровень вставляется на указанную позицию (splice)
+- Все уровни ниже сдвигаются автоматически
+- Очки пересчитываются по формуле (позиция = индекс + 1)
+- Если позиция не указана — добавляется в конец
+
+### Auth/Registration Bug Fixes
+- Регистрация: проверка case-insensitive (нельзя зарегистрировать Admin если есть admin)
+- Логин: поиск пользователя case-insensitive
+- Submit Records: playerName берётся из JWT токена, не из формы (нельзя подделать)
+- Profile API: поиск рекордов case-insensitive
+- Pending records: submittedBy ставится из токена
+- Admin users list: корректный мерж всех списков пользователей
+
 ## [0.5.0] — 2026-07-07: Records redesign, add challenges, stronger glass, thicker borders
 
 ### Records Table Redesign

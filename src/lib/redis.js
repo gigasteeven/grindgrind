@@ -158,10 +158,14 @@ export async function removePendingRecord(id) {
   await redis.set(KEYS.pendingRecords, JSON.stringify(filtered));
 }
 
-/* ── Pending record status for player ── */
+/* ── Pending record status for player (case-insensitive) ── */
 export async function getPlayerPendingRecords(username) {
   const records = await getPendingRecords();
-  return records.filter(r => r.playerName === username || r.submittedBy === username);
+  const key = username.toLowerCase();
+  return records.filter(r =>
+    (r.playerName && r.playerName.toLowerCase() === key) ||
+    (r.submittedBy && r.submittedBy.toLowerCase() === key)
+  );
 }
 
 /* ── Update pending record status (for rejection with reason) ── */

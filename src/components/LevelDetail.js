@@ -181,7 +181,7 @@ export default function LevelDetail({ challenge, position, points, type }) {
                 <tr className="border-b-2 border-cg-border">
                   <th className="text-left px-4 sm:px-5 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider w-10">#</th>
                   <th className="text-left px-2 sm:px-3 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider">Holder</th>
-                  <th className="text-center px-2 sm:px-3 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider w-16">100%</th>
+                  <th className="text-center px-2 sm:px-3 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider w-12">✓</th>
                   {isPlatformer && (
                     <th className="text-right px-2 sm:px-3 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider">Time</th>
                   )}
@@ -202,7 +202,7 @@ export default function LevelDetail({ challenge, position, points, type }) {
                     </td>
                     <td className="px-2 sm:px-3 py-3 text-center">
                       {record.percent === 100 ? (
-                        <span className="text-green-400 text-xs font-bold">100%</span>
+                        <span className="text-green-400 text-sm">✓</span>
                       ) : (
                         <span className="text-cg-white-dim text-xs">{record.percent}%</span>
                       )}

@@ -11,7 +11,7 @@ export async function POST(request) {
   }
 
   const body = await request.json();
-  const { name, id, author, verifier, verification, password, percentToQualify, listType, tags } = body;
+  const { name, id, author, verifier, verification, password, percentToQualify, listType, tags, position } = body;
 
   if (!name || !id || !verifier) {
     return NextResponse.json({ error: "Name, ID, and Verifier are required" }, { status: 400 });
@@ -34,10 +34,13 @@ export async function POST(request) {
   const listKey = listType === "platformer" ? KEYS.platformerList : KEYS.challengeList;
   const prefix = listType === "platformer" ? KEYS.platformerPrefix : KEYS.challengePrefix;
 
-  // Add to list
+  // Get current list
   const raw = await redis.get(listKey);
   let list = typeof raw === "string" ? JSON.parse(raw) : (raw || []);
-  list.push(String(id));
+
+  // Insert at specified position, or append at end
+  const insertPos = position && position > 0 ? Math.min(position - 1, list.length) : list.length;
+  list.splice(insertPos, 0, String(id));
   await redis.set(listKey, JSON.stringify(list));
 
   // Save challenge data
@@ -46,8 +49,8 @@ export async function POST(request) {
   await addAdminLog({
     admin: decoded.username,
     action: "Added challenge",
-    details: { name, id, listType: listType || "challenge" },
+    details: { name, id, listType: listType || "challenge", position: insertPos + 1 },
   });
 
-  return NextResponse.json({ success: true });
+  return NextResponse.json({ success: true, position: insertPos + 1 });
 }
