@@ -4,7 +4,16 @@ import Link from "next/link";
 
 /* Country flag SVG */
 function CountryFlag({ code, size = 18 }) {
-  if (!code || code.length !== 2) return null;
+  if (!code || code.length !== 2) {
+    // International flag (white flag on pole)
+    return (
+      <svg width={size} height={Math.round(size * 0.75)} viewBox="0 0 24 18" className="inline-block shrink-0 rounded-sm">
+        <rect width="24" height="18" rx="2" fill="#e0e0e0" stroke="#999" strokeWidth="0.5"/>
+        <circle cx="12" cy="9" r="4" fill="none" stroke="#999" strokeWidth="1"/>
+        <text x="12" y="12" textAnchor="middle" fontSize="6" fill="#999">INT</text>
+      </svg>
+    );
+  }
   return (
     <img
       src={`https://flagcdn.com/${code.toLowerCase()}.svg`}
@@ -47,9 +56,9 @@ export default function LevelDetail({ challenge, position, points, type }) {
     "cg-rank-default";
 
   return (
-    <div className="mx-auto max-w-4xl px-4 sm:px-6 py-8">
+    <div className="mx-auto max-w-4xl px-3 sm:px-6 py-6 sm:py-8">
       {/* Breadcrumb */}
-      <div className="mb-6">
+      <div className="mb-4 sm:mb-6">
         <Link
           href={isPlatformer ? "/list/platformer" : "/list/challenge"}
           className="text-sm text-cg-white-dim hover:text-cg-orange transition-colors"
@@ -58,28 +67,28 @@ export default function LevelDetail({ challenge, position, points, type }) {
         </Link>
       </div>
 
-      {/* ── Level Header ── */}
-      <div className="cg-card mb-6 overflow-hidden">
+      {/* ── Level Header (glass) ── */}
+      <div className="cg-glass mb-4 sm:mb-6 overflow-hidden">
         {/* Top accent bar */}
-        <div className="h-1 bg-gradient-to-r from-cg-orange via-cg-orange-bright to-cg-yellow" />
+        <div className="h-1" style={{ backgroundImage: "linear-gradient(to right, var(--cg-accent-from), var(--cg-accent-to))" }} />
 
-        <div className="p-5 sm:p-6">
+        <div className="p-4 sm:p-6">
           {/* Title row */}
-          <div className="flex items-start gap-4">
-            <div className={`cg-rank w-14 h-14 text-lg ${rankClass}`}>
+          <div className="flex items-start gap-3 sm:gap-4">
+            <div className={`cg-rank w-12 h-12 sm:w-14 sm:h-14 text-base sm:text-lg ${rankClass}`}>
               #{position}
             </div>
             <div className="flex-1 min-w-0">
-              <h1 className="text-2xl sm:text-3xl font-bold text-cg-white">
+              <h1 className="cg-level-name text-xl sm:text-3xl text-cg-white">
                 {challenge.name}
               </h1>
-              <p className="text-sm text-cg-white-dim mt-1">
+              <p className="text-xs sm:text-sm text-cg-white-dim mt-1">
                 by <span className="text-cg-white">{challenge.author || "Unknown"}</span>
                 {challenge.creators?.length > 0 && (
                   <>, <span className="text-cg-white">{challenge.creators.join(", ")}</span></>
                 )}
               </p>
-              <p className="text-sm text-cg-white-dim mt-0.5">
+              <p className="text-xs sm:text-sm text-cg-white-dim mt-0.5">
                 verified by <span className="text-cg-orange-bright font-medium">{challenge.verifier || "—"}</span>
               </p>
             </div>
@@ -112,21 +121,21 @@ export default function LevelDetail({ challenge, position, points, type }) {
         </div>
       </div>
 
-      {/* ── Level Info Grid ── */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-        <div className="cg-card p-3 sm:p-4">
+      {/* ── Level Info Grid (glass) ── */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-4 sm:mb-6">
+        <div className="cg-glass p-3 sm:p-4">
           <p className="text-[10px] text-cg-white-dim uppercase tracking-wider mb-1">Level ID</p>
           <p className="text-sm font-mono font-medium text-cg-white">{challenge.id}</p>
         </div>
-        <div className="cg-card p-3 sm:p-4">
+        <div className="cg-glass p-3 sm:p-4">
           <p className="text-[10px] text-cg-white-dim uppercase tracking-wider mb-1">Password</p>
           <p className="text-sm font-medium text-cg-white">{challenge.password || "Not Copyable"}</p>
         </div>
-        <div className="cg-card p-3 sm:p-4">
+        <div className="cg-glass p-3 sm:p-4">
           <p className="text-[10px] text-cg-white-dim uppercase tracking-wider mb-1">Qualify %</p>
           <p className="text-sm font-medium text-cg-white">{challenge.percentToQualify || 100}%</p>
         </div>
-        <div className="cg-card p-3 sm:p-4">
+        <div className="cg-glass p-3 sm:p-4">
           <p className="text-[10px] text-cg-white-dim uppercase tracking-wider mb-1">Verifier</p>
           <p className="text-sm font-medium text-cg-orange-bright truncate">{challenge.verifier || "—"}</p>
         </div>
@@ -134,11 +143,11 @@ export default function LevelDetail({ challenge, position, points, type }) {
 
       {/* ── Tags ── */}
       {challenge.tags?.length > 0 && (
-        <div className="cg-card p-4 mb-6">
+        <div className="cg-glass p-4 mb-4 sm:mb-6">
           <h3 className="text-xs font-semibold text-cg-orange uppercase tracking-wider mb-2">Tags</h3>
           <div className="flex flex-wrap gap-2">
             {challenge.tags.map((tag) => (
-              <span key={tag} className="cg-badge bg-cg-brown border border-cg-border text-cg-white-dim">
+              <span key={tag} className="cg-badge bg-cg-surface-2 border border-cg-border text-cg-white-dim">
                 {tag}
               </span>
             ))}
@@ -146,13 +155,13 @@ export default function LevelDetail({ challenge, position, points, type }) {
         </div>
       )}
 
-      {/* ── Records ── */}
-      <div className="cg-card overflow-hidden">
+      {/* ── Records (glass) ── */}
+      <div className="cg-glass overflow-hidden">
         {/* Header */}
-        <div className="px-5 py-4 border-b border-cg-border">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-bold text-cg-white">Records</h3>
-            <div className="flex items-center gap-3 text-xs">
+        <div className="px-4 sm:px-5 py-3 sm:py-4 border-b border-cg-border">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <h3 className="text-base sm:text-lg font-bold text-cg-white">Records</h3>
+            <div className="flex items-center gap-2 sm:gap-3 text-xs">
               <span className="text-cg-white-dim">{totalRecords} registered</span>
               <span className="text-cg-white-dim/40">·</span>
               <span className="text-cg-yellow">{fullClears} are 100%</span>
@@ -171,40 +180,37 @@ export default function LevelDetail({ challenge, position, points, type }) {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-cg-border">
-                  <th className="text-left px-5 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider w-10">#</th>
-                  <th className="text-left px-3 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider">Holder</th>
-                  <th className="text-left px-3 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider w-16">Flag</th>
-                  <th className="text-left px-3 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider w-12">Pre</th>
-                  <th className="text-center px-3 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider w-12">100%</th>
+                  <th className="text-left px-4 sm:px-5 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider w-10">#</th>
+                  <th className="text-left px-2 sm:px-3 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider">Holder</th>
+                  <th className="text-left px-2 sm:px-3 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider w-16">Flag</th>
+                  <th className="text-left px-2 sm:px-3 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider w-12">Pre</th>
+                  <th className="text-center px-2 sm:px-3 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider w-12">100%</th>
                   {isPlatformer && (
-                    <th className="text-right px-3 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider">Time</th>
+                    <th className="text-right px-2 sm:px-3 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider">Time</th>
                   )}
-                  <th className="text-right px-5 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider">Proof</th>
+                  <th className="text-right px-4 sm:px-5 py-2.5 text-[10px] font-semibold text-cg-orange uppercase tracking-wider">Proof</th>
                 </tr>
               </thead>
               <tbody>
                 {records.map((record, idx) => (
-                  <tr
-                    key={`${record.user}-${idx}`}
-                    className="border-b border-cg-border/30 transition-colors duration-150 hover:bg-cg-brown/40"
-                  >
-                    <td className="px-5 py-3">
+                  <tr key={`${record.user}-${idx}`} className="border-b border-cg-border/30 transition-colors duration-150 hover:bg-cg-surface-2/40">
+                    <td className="px-4 sm:px-5 py-3">
                       <span className="font-bold text-cg-white-dim">{idx + 1}</span>
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="px-2 sm:px-3 py-3">
                       <span className="font-medium text-cg-white">{record.user}</span>
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="px-2 sm:px-3 py-3">
                       <CountryFlag code={record.country} />
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="px-2 sm:px-3 py-3">
                       {record.percent < 100 ? (
                         <span className="text-cg-white-dim">{record.percent}%</span>
                       ) : (
                         <span className="text-cg-white-dim/20">—</span>
                       )}
                     </td>
-                    <td className="px-3 py-3 text-center">
+                    <td className="px-2 sm:px-3 py-3 text-center">
                       {record.percent === 100 ? (
                         <span className="text-green-400 text-xs">✓</span>
                       ) : (
@@ -212,11 +218,11 @@ export default function LevelDetail({ challenge, position, points, type }) {
                       )}
                     </td>
                     {isPlatformer && (
-                      <td className="px-3 py-3 text-right">
+                      <td className="px-2 sm:px-3 py-3 text-right">
                         <span className="font-mono text-cg-yellow text-xs">{record.time || "—"}</span>
                       </td>
                     )}
-                    <td className="px-5 py-3 text-right">
+                    <td className="px-4 sm:px-5 py-3 text-right">
                       <VideoButton url={record.link} />
                     </td>
                   </tr>
@@ -225,7 +231,7 @@ export default function LevelDetail({ challenge, position, points, type }) {
             </table>
           </div>
         ) : (
-          <div className="px-5 py-12 text-center">
+          <div className="px-4 sm:px-5 py-8 sm:py-12 text-center">
             <p className="text-cg-white-dim mb-4">No records yet.</p>
             <Link href="/submit" className="cg-btn cg-btn-primary text-sm">
               Submit a Record

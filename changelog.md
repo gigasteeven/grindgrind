@@ -1,5 +1,51 @@
 # Changelog — ChallengeGrind
 
+## [0.4.0] — 2026-07-07: Theme system, card redesign, glass UI, mobile support, user management
+
+### Theme System
+- **3 темы**: ChallengeGrind (по умолчанию), Black & White, Arcane (#211f20 #f8f8e4 #e79291 #65161b)
+- ThemeProvider + ThemeSwitcher в navbar
+- Тема сохраняется в localStorage
+- CSS переменные для всех цветов — плавное переключение
+
+### Card Redesign (списки челленджей и платформеров)
+- Горизонтальные карточки с большим номером позиции
+- Название уровня жирным шрифтом (cg-level-name)
+- "published by [author]" под названием
+- Records и Score справа на десктопе
+- Мобильная версия: компактная с stats снизу
+
+### Glass Shader UI
+- .cg-glass класс: backdrop-blur + полупрозрачный фон
+- Применён к странице уровня: header, info grid, records
+- Приятный минималистичный эффект
+
+### Mobile Support
+- viewport meta tag
+- Адаптивные отступы и размеры шрифтов
+- Мобильное меню с прокруткой
+- Stats Viewer: двухпанельный на десктопе, стек на мобиле
+- Все страницы оптимизированы для 400px+
+
+### User Management (Admin Panel)
+- Новая вкладка "Users" в админке
+- Список всех пользователей с country и ролью
+- Возможность менять пароль любого пользователя
+- Возможность менять country (флаг) любого пользователя
+- Логи всех изменений
+- API: GET/POST /api/admin/users
+- Регистрация добавляет пользователя в users:list
+
+### Stats Viewer — флаги
+- SVG флаги из flagcdn.com для всех игроков
+- Если флаг не установлен — международный флаг (INT)
+- Флаги в списке игроков и в панели деталей
+
+### API Changes
+- `GET /api/admin/users` — список всех пользователей
+- `POST /api/admin/users` — обновление пароля и страны пользователя
+- `POST /api/auth/signup` — добавляет пользователя в users:list
+
 ## [0.3.0] — 2026-07-07: Complete CSS overhaul + Stats Viewer redesign
 
 ### CSS Overhaul

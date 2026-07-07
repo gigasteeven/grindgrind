@@ -3,9 +3,17 @@
 import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 
-/* Country flag SVG */
+/* Country flag SVG — defaults to international flag */
 function CountryFlag({ code, size = 18 }) {
-  if (!code || code.length !== 2) return null;
+  if (!code || code.length !== 2) {
+    return (
+      <svg width={size} height={Math.round(size * 0.75)} viewBox="0 0 24 18" className="inline-block shrink-0 rounded-sm">
+        <rect width="24" height="18" rx="2" fill="#e0e0e0" stroke="#999" strokeWidth="0.5"/>
+        <circle cx="12" cy="9" r="4" fill="none" stroke="#999" strokeWidth="1"/>
+        <text x="12" y="12" textAnchor="middle" fontSize="5" fill="#999" fontWeight="bold">INT</text>
+      </svg>
+    );
+  }
   return (
     <img
       src={`https://flagcdn.com/${code.toLowerCase()}.svg`}
@@ -30,25 +38,25 @@ function PlayerRow({ player, rank, selected, onClick }) {
   return (
     <button
       onClick={onClick}
-      className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-all duration-150 border-l-2 ${
+      className={`w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 text-left transition-all duration-150 border-l-2 ${
         selected
-          ? "bg-cg-brown/60 border-cg-orange"
-          : "border-transparent hover:bg-cg-brown/30"
+          ? "bg-cg-surface-2/60 border-cg-orange"
+          : "border-transparent hover:bg-cg-surface-2/30"
       }`}
     >
-      <span className={`cg-rank w-8 h-8 text-xs ${rankClass(rank)}`}>
+      <span className={`cg-rank w-7 h-7 sm:w-8 sm:h-8 text-[10px] sm:text-xs ${rankClass(rank)}`}>
         {rank}
       </span>
       <span className="flex-1 min-w-0">
-        <span className="text-sm font-medium text-cg-white truncate block">
+        <span className="text-xs sm:text-sm font-medium text-cg-white truncate block">
           {player.username}
         </span>
-        <span className="text-xs text-cg-white-dim">
+        <span className="text-[10px] sm:text-xs text-cg-white-dim">
           {player.completions.length} completions
         </span>
       </span>
-      {player.country && <CountryFlag code={player.country} size={16} />}
-      <span className="text-sm font-bold text-cg-yellow shrink-0">
+      <CountryFlag code={player.country} size={16} />
+      <span className="text-xs sm:text-sm font-bold text-cg-yellow shrink-0">
         {player.score}
       </span>
     </button>
@@ -65,22 +73,19 @@ function PlayerDetail({ player, rank, challenges }) {
     );
   }
 
-  // Compute stats breakdown
   const top5 = player.completions.filter(c => c.position <= 5).length;
   const top15 = player.completions.filter(c => c.position <= 15 && c.position > 5).length;
   const rest = player.completions.filter(c => c.position > 15).length;
-
-  // Find verified challenges
   const verified = challenges.filter(c => c.verifier === player.username);
 
   return (
     <div className="cg-card h-full overflow-y-auto" style={{ maxHeight: "calc(100vh - 8rem)" }}>
       {/* Header */}
-      <div className="p-5 border-b border-cg-border">
+      <div className="p-4 sm:p-5 border-b border-cg-border">
         <div className="flex items-center gap-3">
-          {player.country && <CountryFlag code={player.country} size={32} />}
+          <CountryFlag code={player.country} size={32} />
           <div className="flex-1 min-w-0">
-            <h2 className="text-xl font-bold text-cg-white truncate">{player.username}</h2>
+            <h2 className="text-lg sm:text-xl font-bold text-cg-white truncate">{player.username}</h2>
             <p className="text-xs text-cg-white-dim mt-0.5">
               {player.country ? `${player.country.toUpperCase()} · ` : ""}{player.completions.length} completions
             </p>
@@ -89,31 +94,27 @@ function PlayerDetail({ player, rank, challenges }) {
       </div>
 
       {/* Rank & Score */}
-      <div className="grid grid-cols-2 gap-px bg-cg-border">
-        <div className="bg-cg-dark-brown p-4">
+      <div className="grid grid-cols-2 gap-px" style={{ backgroundColor: "var(--cg-border)" }}>
+        <div className="bg-cg-surface p-4">
           <p className="text-[10px] text-cg-white-dim uppercase tracking-wider mb-1">Rank</p>
           <p className="text-2xl font-bold text-cg-white">#{rank}</p>
         </div>
-        <div className="bg-cg-dark-brown p-4">
+        <div className="bg-cg-surface p-4">
           <p className="text-[10px] text-cg-white-dim uppercase tracking-wider mb-1">Score</p>
           <p className="text-2xl font-bold text-cg-yellow">{player.score}</p>
         </div>
       </div>
 
       {/* Stats breakdown */}
-      <div className="p-5 border-b border-cg-border">
+      <div className="p-4 sm:p-5 border-b border-cg-border">
         <h3 className="text-[10px] font-semibold text-cg-orange uppercase tracking-wider mb-2">ChallengeGrind Stats</h3>
         <p className="text-sm text-cg-white-dim">
-          <span className="text-cg-white">{top5}</span> Top 5,
-          {" "}
-          <span className="text-cg-white">{top15}</span> Top 15,
-          {" "}
-          <span className="text-cg-white">{rest}</span> Extended
+          <span className="text-cg-white">{top5}</span> Top 5, <span className="text-cg-white">{top15}</span> Top 15, <span className="text-cg-white">{rest}</span> Extended
         </p>
       </div>
 
       {/* Hardest */}
-      <div className="p-5 border-b border-cg-border">
+      <div className="p-4 sm:p-5 border-b border-cg-border">
         <h3 className="text-[10px] font-semibold text-cg-orange uppercase tracking-wider mb-2">Hardest Challenge</h3>
         {player.hardest ? (
           <Link
@@ -128,7 +129,7 @@ function PlayerDetail({ player, rank, challenges }) {
       </div>
 
       {/* Completed */}
-      <div className="p-5 border-b border-cg-border">
+      <div className="p-4 sm:p-5 border-b border-cg-border">
         <h3 className="text-[10px] font-semibold text-cg-orange uppercase tracking-wider mb-2">
           Challenges Completed ({player.completions.length})
         </h3>
@@ -140,7 +141,7 @@ function PlayerDetail({ player, rank, challenges }) {
                 <Link
                   key={idx}
                   href={`/level/challenge/${c.challengeId}`}
-                  className="cg-badge bg-cg-brown border border-cg-border text-cg-white-dim hover:border-cg-orange/40 hover:text-cg-white transition-colors"
+                  className="cg-badge bg-cg-surface-2 border border-cg-border text-cg-white-dim hover:border-cg-orange/40 hover:text-cg-white transition-colors"
                 >
                   #{c.position} {c.challengeName}
                 </Link>
@@ -152,7 +153,7 @@ function PlayerDetail({ player, rank, challenges }) {
       </div>
 
       {/* Verified */}
-      <div className="p-5 border-b border-cg-border">
+      <div className="p-4 sm:p-5 border-b border-cg-border">
         <h3 className="text-[10px] font-semibold text-cg-orange uppercase tracking-wider mb-2">
           Challenges Verified ({verified.length})
         </h3>
@@ -162,7 +163,7 @@ function PlayerDetail({ player, rank, challenges }) {
               <Link
                 key={idx}
                 href={`/level/challenge/${c.id}`}
-                className="cg-badge bg-cg-brown border border-cg-border text-cg-white-dim hover:border-cg-orange/40 hover:text-cg-white transition-colors"
+                className="cg-badge bg-cg-surface-2 border border-cg-border text-cg-white-dim hover:border-cg-orange/40 hover:text-cg-white transition-colors"
               >
                 {c.name}
               </Link>
@@ -174,12 +175,12 @@ function PlayerDetail({ player, rank, challenges }) {
       </div>
 
       {/* Created / Published */}
-      <div className="grid grid-cols-2 gap-px bg-cg-border">
-        <div className="bg-cg-dark-brown p-4">
+      <div className="grid grid-cols-2 gap-px" style={{ backgroundColor: "var(--cg-border)" }}>
+        <div className="bg-cg-surface p-4">
           <h3 className="text-[10px] font-semibold text-cg-orange uppercase tracking-wider mb-1">Created</h3>
           <p className="text-sm text-cg-white-dim">None</p>
         </div>
-        <div className="bg-cg-dark-brown p-4">
+        <div className="bg-cg-surface p-4">
           <h3 className="text-[10px] font-semibold text-cg-orange uppercase tracking-wider mb-1">Published</h3>
           <p className="text-sm text-cg-white-dim">None</p>
         </div>
@@ -194,30 +195,25 @@ export default function StatsViewerClient({ rankings, challenges }) {
   const [page, setPage] = useState(0);
   const perPage = 25;
 
-  // Filter by search
   const filtered = useMemo(() => {
     if (!search) return rankings;
     const q = search.toLowerCase();
     return rankings.filter(r => r.username.toLowerCase().includes(q));
   }, [search, rankings]);
 
-  // Pagination
   const totalPages = Math.ceil(filtered.length / perPage);
   const pageData = filtered.slice(page * perPage, (page + 1) * perPage);
-
-  // Selected player
   const selectedPlayer = filtered[selectedIdx];
   const selectedRank = selectedIdx + 1;
 
-  // Reset selection when search changes
   useEffect(() => {
     setSelectedIdx(0);
     setPage(0);
   }, [search]);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 sm:px-6 py-8">
-      <div className="mb-6">
+    <div className="mx-auto max-w-6xl px-3 sm:px-6 py-6 sm:py-8">
+      <div className="mb-4 sm:mb-6">
         <h1 className="cg-section-title text-cg-white">Stats Viewer</h1>
         <p className="mt-1 text-sm text-cg-white-dim">
           {rankings.length} players ranked by ChallengeGrind score
@@ -225,7 +221,7 @@ export default function StatsViewerClient({ rankings, challenges }) {
       </div>
 
       {/* Two-panel layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-3 sm:gap-4">
         {/* Left: Player list */}
         <div className="cg-card overflow-hidden">
           {/* Search */}
@@ -248,7 +244,7 @@ export default function StatsViewerClient({ rankings, challenges }) {
           </div>
 
           {/* List */}
-          <div className="max-h-[60vh] lg:max-h-[calc(100vh-16rem)] overflow-y-auto">
+          <div className="max-h-[50vh] lg:max-h-[calc(100vh-16rem)] overflow-y-auto">
             {pageData.length > 0 ? (
               pageData.map((player, idx) => {
                 const actualIdx = page * perPage + idx;
@@ -278,11 +274,9 @@ export default function StatsViewerClient({ rankings, challenges }) {
                 disabled={page === 0}
                 className="cg-btn cg-btn-ghost text-xs px-3 py-1.5 disabled:opacity-30"
               >
-                ← Previous
+                ← Prev
               </button>
-              <span className="text-xs text-cg-white-dim">
-                {page + 1} / {totalPages}
-              </span>
+              <span className="text-xs text-cg-white-dim">{page + 1} / {totalPages}</span>
               <button
                 onClick={() => { setPage(Math.min(totalPages - 1, page + 1)); setSelectedIdx((page + 1) * perPage); }}
                 disabled={page >= totalPages - 1}
@@ -295,12 +289,7 @@ export default function StatsViewerClient({ rankings, challenges }) {
         </div>
 
         {/* Right: Detail panel */}
-        <div className="hidden lg:block">
-          <PlayerDetail player={selectedPlayer} rank={selectedRank} challenges={challenges} />
-        </div>
-
-        {/* Mobile: detail below list */}
-        <div className="lg:hidden">
+        <div className="lg:block">
           <PlayerDetail player={selectedPlayer} rank={selectedRank} challenges={challenges} />
         </div>
       </div>

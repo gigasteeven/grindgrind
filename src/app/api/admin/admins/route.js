@@ -3,28 +3,6 @@ import { verifyToken } from "@/lib/auth";
 import { redis, KEYS, addAdminLog, getUser } from "@/lib/redis";
 import bcrypt from "bcryptjs";
 
-export async function GET(request) {
-  const authHeader = request.headers.get("authorization");
-  const token = authHeader?.replace("Bearer ", "");
-  const decoded = verifyToken(token);
-  if (!decoded?.isAdmin) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  // List all users with isAdmin
-  // Upstash doesn't support SCAN easily, so we track admin list
-  const adminListRaw = await redis.get("admins:list");
-  let adminList = typeof adminListRaw === "string" ? JSON.parse(adminListRaw) : (adminListRaw || ["admin"]);
-  const admins = [];
-  for (const username of adminList) {
-    const user = await getUser(username);
-    if (user) {
-      admins.push({ username: user.username, isOwner: user.isOwner || false });
-    }
-  }
-  return NextResponse.json({ admins });
-}
-
 export async function POST(request) {
   const authHeader = request.headers.get("authorization");
   const token = authHeader?.replace("Bearer ", "");
@@ -33,7 +11,6 @@ export async function POST(request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Only owner can add admins
   const currentUser = await getUser(decoded.username);
   if (!currentUser?.isOwner) {
     return NextResponse.json({ error: "Only the owner can add admins" }, { status: 403 });
@@ -44,7 +21,6 @@ export async function POST(request) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 });
   }
 
-  // Check if user exists
   const existing = await getUser(username);
   if (existing) {
     return NextResponse.json({ error: "User already exists" }, { status: 400 });
@@ -62,13 +38,21 @@ export async function POST(request) {
   };
   await redis.set(`${KEYS.userPrefix}${username.toLowerCase()}`, newUser);
 
-  // Track admin list
+  // Track in admin list
   const adminListRaw = await redis.get("admins:list");
   let adminList = typeof adminListRaw === "string" ? JSON.parse(adminListRaw) : (adminListRaw || ["admin"]);
   if (!adminList.includes(username.toLowerCase())) {
     adminList.push(username.toLowerCase());
   }
   await redis.set("admins:list", JSON.stringify(adminList));
+
+  // Track in users list
+  const userListRaw = await redis.get("users:list");
+  let userList = typeof userListRaw === "string" ? JSON.parse(userListRaw) : (userListRaw || []);
+  if (!userList.includes(username.toLowerCase())) {
+    userList.push(username.toLowerCase());
+    await redis.set("users:list", JSON.stringify(userList));
+  }
 
   await addAdminLog({
     admin: decoded.username,

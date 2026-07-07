@@ -1,4 +1,4 @@
-import { getChallengeList } from "@/lib/redis";
+import { getChallengeList, getPlatformerList } from "@/lib/redis";
 import { getRankings } from "@/lib/formula";
 import StatsViewerClient from "@/components/StatsViewerClient";
 
@@ -8,7 +8,8 @@ export default async function StatsViewerPage() {
   const challenges = await getChallengeList();
   const rankings = getRankings(challenges);
 
-  // Pass serializable data
+  // Add country info to rankings from user records
+  // (rankings are built from challenge records, which may have country field)
   const challengesData = challenges.map(c => ({
     id: c.id,
     name: c.name,

@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 /* ── Dropdown item ── */
 function NavDropdown({ label, items }) {
@@ -19,11 +20,7 @@ function NavDropdown({ label, items }) {
   };
 
   return (
-    <div
-      className="relative"
-      onMouseEnter={handleEnter}
-      onMouseLeave={handleLeave}
-    >
+    <div className="relative" onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
       <button
         className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-cg-white-dim transition-colors duration-200 hover:text-cg-white"
         aria-expanded={open}
@@ -31,25 +28,22 @@ function NavDropdown({ label, items }) {
         {label}
         <svg
           className={`h-3.5 w-3.5 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2.5}
+          fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}
         >
           <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
         </svg>
       </button>
 
       {open && (
-        <div className="absolute left-0 top-full z-50 min-w-[180px] animate-slide-down rounded-lg border border-cg-border bg-cg-dark-brown py-1.5 shadow-xl shadow-black/50">
+        <div className="absolute left-0 top-full z-50 min-w-[180px] animate-slide-down rounded-lg border border-cg-border bg-cg-surface py-1.5 shadow-xl shadow-black/50">
           {items.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={`block px-4 py-2 text-sm transition-colors duration-150 ${
                 pathname === item.href
-                  ? "text-cg-orange bg-cg-brown/50"
-                  : "text-cg-white-dim hover:text-cg-white hover:bg-cg-brown/30"
+                  ? "text-cg-orange bg-cg-surface-2"
+                  : "text-cg-white-dim hover:text-cg-white hover:bg-cg-surface-2/50"
               }`}
             >
               {item.label}
@@ -106,7 +100,7 @@ function MobileMenu({ isLoggedIn, username, isAdmin, onLogout }) {
       </button>
 
       {open && (
-        <div className="absolute top-full left-0 right-0 z-50 animate-slide-down border-b border-cg-border bg-cg-dark-brown md:hidden">
+        <div className="absolute top-full left-0 right-0 z-50 animate-slide-down border-b border-cg-border bg-cg-surface md:hidden max-h-[calc(100vh-4rem)] overflow-y-auto">
           <div className="px-4 py-4 space-y-4">
             {sections.map((section) => (
               <div key={section.title}>
@@ -126,51 +120,28 @@ function MobileMenu({ isLoggedIn, username, isAdmin, onLogout }) {
               </div>
             ))}
             <div className="pt-2 border-t border-cg-border space-y-2">
-              <Link
-                href="/stats"
-                className="block py-1.5 text-sm font-medium text-cg-white"
-                onClick={() => setOpen(false)}
-              >
+              <Link href="/stats" className="block py-1.5 text-sm font-medium text-cg-white" onClick={() => setOpen(false)}>
                 Stats Viewer
               </Link>
-              <Link
-                href="/submit"
-                className="block py-1.5 text-sm font-medium text-cg-white"
-                onClick={() => setOpen(false)}
-              >
+              <Link href="/submit" className="block py-1.5 text-sm font-medium text-cg-white" onClick={() => setOpen(false)}>
                 Submit Records
               </Link>
               {isLoggedIn ? (
                 <>
-                  <Link
-                    href="/profile"
-                    className="block py-1.5 text-sm font-medium text-cg-white"
-                    onClick={() => setOpen(false)}
-                  >
+                  <Link href="/profile" className="block py-1.5 text-sm font-medium text-cg-white" onClick={() => setOpen(false)}>
                     Profile ({username})
                   </Link>
                   {isAdmin && (
-                    <Link
-                      href="/admin"
-                      className="block py-1.5 text-sm font-medium text-cg-orange"
-                      onClick={() => setOpen(false)}
-                    >
+                    <Link href="/admin" className="block py-1.5 text-sm font-medium text-cg-orange" onClick={() => setOpen(false)}>
                       Admin Panel
                     </Link>
                   )}
-                  <button
-                    onClick={() => { onLogout(); setOpen(false); }}
-                    className="block py-1.5 text-sm font-medium text-red-400"
-                  >
+                  <button onClick={() => { onLogout(); setOpen(false); }} className="block py-1.5 text-sm font-medium text-red-400">
                     Logout
                   </button>
                 </>
               ) : (
-                <Link
-                  href="/auth/signup"
-                  className="block py-2 text-sm font-semibold text-cg-orange"
-                  onClick={() => setOpen(false)}
-                >
+                <Link href="/auth/signup" className="block py-2 text-sm font-semibold text-cg-orange" onClick={() => setOpen(false)}>
                   Sign Up
                 </Link>
               )}
@@ -204,7 +175,6 @@ export default function Navbar() {
       }
     };
     checkAuth();
-    // Re-check on route change
     window.addEventListener("storage", checkAuth);
     return () => window.removeEventListener("storage", checkAuth);
   }, []);
@@ -219,15 +189,15 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-40 border-b border-cg-border bg-cg-black/95 backdrop-blur-sm">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="flex h-16 items-center justify-between">
+    <nav className="fixed top-0 left-0 right-0 z-40 border-b border-cg-border backdrop-blur-md" style={{ backgroundColor: "color-mix(in srgb, var(--cg-bg) 92%, transparent)" }}>
+      <div className="mx-auto max-w-7xl px-3 sm:px-6">
+        <div className="flex h-16 items-center justify-between gap-2">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0">
             <img src="/ico.png" alt="ChallengeGrind" className="w-8 h-8 rounded" />
             <span className="text-lg font-extrabold tracking-tight hidden sm:block">
               <span className="text-cg-white">Challenge</span>
-              <span className="bg-gradient-to-r from-cg-orange via-cg-orange-bright to-cg-yellow bg-clip-text text-transparent">
+              <span style={{ backgroundImage: `linear-gradient(to right, var(--cg-accent-from), var(--cg-accent-to))`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
                 Grind
               </span>
             </span>
@@ -235,77 +205,47 @@ export default function Navbar() {
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-1">
-            <NavDropdown
-              label="List"
-              items={[
-                { label: "Challenge List", href: "/list/challenge" },
-                { label: "Platformer List", href: "/list/platformer" },
-              ]}
-            />
-            <NavDropdown
-              label="Guidelines"
-              items={[
-                { label: "Rules", href: "/guidelines/rules" },
-                { label: "Level Submission", href: "/guidelines/submission" },
-              ]}
-            />
-            <NavDropdown
-              label="Other"
-              items={[
-                { label: "Staff", href: "/other/staff" },
-                { label: "Social Media", href: "/other/social" },
-              ]}
-            />
-            <Link
-              href="/stats"
-              className="px-3 py-2 text-sm font-medium text-cg-white-dim transition-colors duration-200 hover:text-cg-white"
-            >
+            <NavDropdown label="List" items={[
+              { label: "Challenge List", href: "/list/challenge" },
+              { label: "Platformer List", href: "/list/platformer" },
+            ]} />
+            <NavDropdown label="Guidelines" items={[
+              { label: "Rules", href: "/guidelines/rules" },
+              { label: "Level Submission", href: "/guidelines/submission" },
+            ]} />
+            <NavDropdown label="Other" items={[
+              { label: "Staff", href: "/other/staff" },
+              { label: "Social Media", href: "/other/social" },
+            ]} />
+            <Link href="/stats" className="px-3 py-2 text-sm font-medium text-cg-white-dim transition-colors duration-200 hover:text-cg-white">
               Stats Viewer
             </Link>
-            <Link
-              href="/submit"
-              className="px-3 py-2 text-sm font-medium text-cg-white-dim transition-colors duration-200 hover:text-cg-white"
-            >
+            <Link href="/submit" className="px-3 py-2 text-sm font-medium text-cg-white-dim transition-colors duration-200 hover:text-cg-white">
               Submit Records
             </Link>
           </div>
 
           {/* Right side */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="hidden sm:block">
+              <ThemeSwitcher />
+            </div>
             {isLoggedIn ? (
               <div className="hidden sm:flex items-center gap-2">
-                <Link
-                  href="/profile"
-                  className="px-3 py-2 text-sm font-medium text-cg-white-dim transition-colors duration-200 hover:text-cg-white"
-                >
+                <Link href="/profile" className="px-3 py-2 text-sm font-medium text-cg-white-dim transition-colors duration-200 hover:text-cg-white">
                   {username}
                 </Link>
                 {isAdmin && (
-                  <Link href="/admin" className="cg-btn cg-btn-ghost text-sm">
-                    Admin
-                  </Link>
+                  <Link href="/admin" className="cg-btn cg-btn-ghost text-sm">Admin</Link>
                 )}
-                <button
-                  onClick={handleLogout}
-                  className="cg-btn px-3 py-2 text-sm border border-red-500/30 text-red-400 hover:bg-red-500/10 rounded-md transition-all duration-200"
-                >
+                <button onClick={handleLogout} className="cg-btn px-3 py-2 text-sm border border-red-500/30 text-red-400 hover:bg-red-500/10 rounded-md transition-all duration-200">
                   Logout
                 </button>
               </div>
             ) : (
-              <Link
-                href="/auth/signup"
-                className="cg-btn cg-btn-primary hidden sm:inline-flex"
-              >
-                Sign Up
-              </Link>
+              <Link href="/auth/signup" className="cg-btn cg-btn-primary hidden sm:inline-flex">Sign Up</Link>
             )}
-            <MobileMenu
-              isLoggedIn={isLoggedIn}
-              username={username}
-              isAdmin={isAdmin}
-              onLogout={handleLogout}
-            />
+            <MobileMenu isLoggedIn={isLoggedIn} username={username} isAdmin={isAdmin} onLogout={handleLogout} />
           </div>
         </div>
       </div>

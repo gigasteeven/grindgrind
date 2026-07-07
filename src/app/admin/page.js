@@ -452,6 +452,117 @@ function AdminsTab({ token, log, isOwner }) {
   );
 }
 
+/* ── Users management tab ── */
+function UsersTab({ token, log }) {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [editingUser, setEditingUser] = useState(null);
+  const [newPassword, setNewPassword] = useState("");
+  const [newCountry, setNewCountry] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const fetchUsers = async () => {
+    const res = await fetch("/api/admin/users", { headers: { Authorization: `Bearer ${token}` } });
+    const data = await res.json();
+    setUsers(data.users || []);
+    setLoading(false);
+  };
+
+  useEffect(() => { fetchUsers(); }, []);
+
+  const saveUser = async (username) => {
+    const body = { username };
+    if (newPassword) body.newPassword = newPassword;
+    if (newCountry !== undefined) body.newCountry = newCountry;
+
+    const res = await fetch("/api/admin/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (data.error) {
+      alert(data.error);
+    } else {
+      log("Updated user", { username, password: newPassword ? "changed" : undefined, country: newCountry });
+      setSuccess(`Updated ${username}`);
+      setEditingUser(null);
+      setNewPassword("");
+      setNewCountry("");
+      setTimeout(() => setSuccess(""), 3000);
+      fetchUsers();
+    }
+  };
+
+  if (loading) return <p className="text-cg-white-dim">Loading...</p>;
+
+  return (
+    <div className="space-y-3">
+      {success && (
+        <div className="cg-card border-green-500/30 p-3 text-sm text-green-400">{success}</div>
+      )}
+      {users.map((u) => (
+        <div key={u.username} className="cg-card p-4">
+          <div className="flex items-center justify-between flex-wrap gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-cg-surface-2 border border-cg-border flex items-center justify-center">
+                <span className="text-sm font-bold text-cg-orange">{u.username.charAt(0).toUpperCase()}</span>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-cg-white">{u.username}</p>
+                <p className="text-xs text-cg-white-dim">
+                  {u.country || "No country"} · {u.isAdmin ? (u.isOwner ? "Owner" : "Admin") : "Player"}
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => {
+                setEditingUser(editingUser === u.username ? null : u.username);
+                setNewPassword("");
+                setNewCountry(u.country || "");
+              }}
+              className="cg-btn cg-btn-ghost text-xs"
+            >
+              {editingUser === u.username ? "Cancel" : "Edit"}
+            </button>
+          </div>
+
+          {editingUser === u.username && (
+            <div className="mt-4 pt-4 border-t border-cg-border space-y-3">
+              <div>
+                <label className="block text-xs text-cg-white-dim mb-1">New Password</label>
+                <input
+                  type="text"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="cg-input"
+                  placeholder="Leave empty to keep current"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-cg-white-dim mb-1">Country (2-letter code)</label>
+                <input
+                  type="text"
+                  value={newCountry}
+                  onChange={(e) => setNewCountry(e.target.value.toUpperCase().slice(0, 2))}
+                  className="cg-input"
+                  placeholder="e.g. RU, US, DE"
+                />
+              </div>
+              <button
+                onClick={() => saveUser(u.username)}
+                className="cg-btn cg-btn-primary text-sm"
+              >
+                Save Changes
+              </button>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function LogsTab({ token }) {
   const [logs, setLogs] = useState([]);
 
@@ -521,6 +632,7 @@ export default function AdminPage() {
   const tabs = [
     { id: "challenges", label: "Challenges" },
     { id: "pending", label: "Pending Records" },
+    { id: "users", label: "Users" },
     { id: "rules", label: "Rules" },
     { id: "submission", label: "Submission" },
     { id: "staff", label: "Staff" },
@@ -569,6 +681,7 @@ export default function AdminPage() {
         {tab === "submission" && <ContentTab token={token} log={log} contentKey="content:submission" label="Submission Guidelines" />}
         {tab === "staff" && <StaffTab token={token} log={log} />}
         {tab === "admins" && <AdminsTab token={token} log={log} isOwner={isOwner} />}
+        {tab === "users" && <UsersTab token={token} log={log} />}
         {tab === "logs" && <LogsTab token={token} />}
       </div>
     </div>

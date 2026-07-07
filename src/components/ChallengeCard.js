@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 /**
- * Rectangular level card for list pages.
- * Clean, minimal design with position badge and key stats.
+ * Level card for list pages.
+ * Horizontal card with big position number, level name, and key info.
  */
 export default function ChallengeCard({ challenge, position, points, type = "challenge" }) {
   const recordCount = challenge.records?.length || 0;
@@ -17,32 +17,38 @@ export default function ChallengeCard({ challenge, position, points, type = "cha
 
   return (
     <Link href={href} className="cg-card-hover block group">
-      <div className="flex items-center gap-4 p-4">
-        {/* Position badge */}
-        <div className={`cg-rank w-12 h-12 text-lg ${rankClass}`}>
-          #{position}
+      <div className="flex items-center gap-3 sm:gap-5 p-4 sm:p-5">
+        {/* Position number */}
+        <div className={`cg-rank w-12 h-12 sm:w-14 sm:h-14 text-lg sm:text-xl ${rankClass}`}>
+          {position}
         </div>
 
-        {/* Level info */}
+        {/* Level name + info */}
         <div className="flex-1 min-w-0">
-          <h3 className="text-base font-semibold text-cg-white truncate group-hover:text-cg-orange transition-colors duration-200">
+          <h3 className="cg-level-name text-lg sm:text-xl text-cg-white truncate group-hover:text-cg-orange transition-colors duration-200">
             {challenge.name}
           </h3>
-          <div className="flex items-center gap-3 mt-1">
-            <span className="text-xs text-cg-white-dim">
-              {challenge.verifier || "—"}
+          <div className="flex items-center gap-2 sm:gap-3 mt-1">
+            <span className="text-xs sm:text-sm text-cg-white-dim">
+              published by <span className="text-cg-white">{challenge.author || "Unknown"}</span>
             </span>
-            <span className="text-xs text-cg-white-dim/40">·</span>
-            <span className="text-xs text-cg-white-dim">
-              {recordCount} records
-            </span>
+          </div>
+          <div className="flex items-center gap-3 mt-1 sm:hidden">
+            <span className="text-xs text-cg-white-dim">{recordCount} records</span>
+            <span className="text-xs text-cg-yellow font-bold">{points} pts</span>
           </div>
         </div>
 
-        {/* Points */}
-        <div className="text-right shrink-0">
-          <p className="text-lg font-bold text-cg-yellow">{points}</p>
-          <p className="text-[10px] text-cg-white-dim uppercase tracking-wider">pts</p>
+        {/* Desktop stats */}
+        <div className="hidden sm:flex items-center gap-6 shrink-0">
+          <div className="text-center">
+            <p className="text-[10px] text-cg-white-dim uppercase tracking-wider">Records</p>
+            <p className="text-sm font-bold text-cg-white">{recordCount}</p>
+          </div>
+          <div className="text-center">
+            <p className="text-[10px] text-cg-white-dim uppercase tracking-wider">Score</p>
+            <p className="text-lg font-bold text-cg-yellow">{points}</p>
+          </div>
         </div>
 
         {/* Arrow */}
