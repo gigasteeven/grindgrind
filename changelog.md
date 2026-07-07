@@ -1,5 +1,26 @@
 # Changelog — ChallengeGrind
 
+## [0.6.0] — 2026-07-07: CRITICAL security fix — server-side auth verification
+
+### Security Fix: localStorage isAdmin bypass
+- **Проблема**: человек мог прописать `localStorage.setItem("user", '{"isAdmin":true}')` и получить доступ к админке
+- **Решение**: 
+  - В localStorage хранится ТОЛЬКО JWT токен (его нельзя подделать без JWT_SECRET)
+  - Новый endpoint `GET /api/auth/me` — проверяет токен на сервере, возвращает реальные данные
+  - Navbar: делает запрос к /api/auth/me, не читает isAdmin из localStorage
+  - Admin Panel: ВСЕГДА требует логин, проверяет токен через /api/auth/me
+  - Profile: данные берутся с сервера через /api/auth/me
+  - Submit Records: имя игрока берётся из токена на сервере
+  - Убрано хранение `user` в localStorage везде
+
+### Files Changed
+- `src/app/api/auth/me/route.js` — NEW: server-side token verification
+- `src/components/Navbar.js` — useAuth hook, fetches from /api/auth/me
+- `src/app/admin/page.js` — always verifies token with server, no localStorage trust
+- `src/app/profile/page.js` — fetches user data from /api/auth/me
+- `src/app/auth/signup/page.js` — stores only token, not user data
+- `src/app/submit/page.js` — fetches user from /api/auth/me
+
 ## [0.5.1] — 2026-07-07: Records fix, case-insensitive nicks, position on add, auth bug fixes
 
 ### Records Table

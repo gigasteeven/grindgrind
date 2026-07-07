@@ -21,12 +21,22 @@ export default function SubmitRecordsPage() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
-    if (token && user) {
-      setIsLoggedIn(true);
-      const userData = JSON.parse(user);
-      setPlayerName(userData.username);
-      setCountry(userData.country || "");
+    if (token) {
+      // Fetch real user data from server
+      fetch("/api/auth/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+          if (data) {
+            setIsLoggedIn(true);
+            setPlayerName(data.username);
+            setCountry(data.country || "");
+          } else {
+            localStorage.removeItem("token");
+          }
+        })
+        .catch(() => {});
     }
     fetchChallenges();
   }, []);

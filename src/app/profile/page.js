@@ -39,43 +39,54 @@ function StatusBadge({ status }) {
     rejected: "❌ Rejected",
   };
   return (
-    <span className={`cg-badge border ${styles[status] || styles.pending}`}>
+    <span className={`cg-badge border-2 ${styles[status] || styles.pending}`}>
       {labels[status] || labels.pending}
     </span>
   );
 }
 
 export default function ProfilePage() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null); // from server, NOT localStorage
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const userData = localStorage.getItem("user");
-    if (!token || !userData) {
+    if (!token) {
       router.push("/auth/signup");
       return;
     }
-    setUser(JSON.parse(userData));
+    // Fetch real user data from server
     fetchProfile(token);
   }, []);
 
   const fetchProfile = async (token) => {
     try {
+      // First verify who we are
+      const meRes = await fetch("/api/auth/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!meRes.ok) {
+        localStorage.removeItem("token");
+        router.push("/auth/signup");
+        return;
+      }
+      const meData = await meRes.json();
+      setUser(meData);
+
+      // Then fetch profile stats
       const res = await fetch("/api/profile", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
         const data = await res.json();
         setStats(data);
-      } else if (res.status === 401) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        router.push("/auth/signup");
       }
-    } catch {}
+    } catch {
+      localStorage.removeItem("token");
+      router.push("/auth/signup");
+    }
     setLoading(false);
   };
 
@@ -94,7 +105,7 @@ export default function ProfilePage() {
       {/* ── Profile Header ── */}
       <div className="cg-card mb-6 overflow-hidden">
         {/* Banner */}
-        <div className="h-20 border-b border-cg-border" style={{ backgroundImage: "linear-gradient(to right, var(--cg-surface-2), var(--cg-surface), var(--cg-surface-2))" }} />
+        <div className="h-20 border-b-2 border-cg-border" style={{ backgroundImage: "linear-gradient(to right, var(--cg-surface-2), var(--cg-surface), var(--cg-surface-2))" }} />
 
         <div className="px-5 pb-5">
           <div className="flex items-end gap-4 -mt-10">
@@ -106,8 +117,8 @@ export default function ProfilePage() {
                   <span className="text-xs font-mono text-cg-white-dim uppercase">{user.country}</span>
                 )}
                 {user.isAdmin && (
-                  <span className="cg-badge bg-cg-orange/10 text-cg-orange border border-cg-orange/30">
-                    {stats?.isOwner ? "👑 Owner" : "🛡️ Admin"}
+                  <span className="cg-badge bg-cg-orange/10 text-cg-orange border-2 border-cg-orange/30">
+                    {user.isOwner ? "👑 Owner" : "🛡️ Admin"}
                   </span>
                 )}
               </div>
@@ -145,7 +156,7 @@ export default function ProfilePage() {
 
       {/* ── Completions ── */}
       <div className="cg-card mb-6 overflow-hidden">
-        <div className="px-5 py-3 border-b border-cg-border">
+        <div className="px-5 py-3 border-b-2 border-cg-border">
           <h3 className="text-sm font-bold text-cg-white">Completions</h3>
         </div>
         {stats?.completions?.length ? (
@@ -177,7 +188,7 @@ export default function ProfilePage() {
 
       {/* ── Record Status (private) ── */}
       <div className="cg-card overflow-hidden">
-        <div className="px-5 py-3 border-b border-cg-border">
+        <div className="px-5 py-3 border-b-2 border-cg-border">
           <div className="flex items-center gap-2">
             <h3 className="text-sm font-bold text-cg-white">Record Status</h3>
             <span className="text-[10px] text-cg-white-dim/40">visible only to you</span>
@@ -207,7 +218,7 @@ export default function ProfilePage() {
                   )}
                 </div>
                 {r.status === "rejected" && r.reason && (
-                  <div className="mt-2 text-[11px] text-red-400 bg-red-500/5 border border-red-500/20 rounded-md px-2.5 py-1.5">
+                  <div className="mt-2 text-[11px] text-red-400 bg-red-500/5 border-2 border-red-500/20 rounded-md px-2.5 py-1.5">
                     <span className="font-semibold">Reason:</span> {r.reason}
                   </div>
                 )}

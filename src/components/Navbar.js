@@ -5,6 +5,44 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import ThemeSwitcher from "./ThemeSwitcher";
 
+/* ── Auth hook — fetches real user data from server ── */
+function useAuth() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  const fetchMe = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setUser(null);
+      setLoading(false);
+      return;
+    }
+    try {
+      const res = await fetch("/api/auth/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data);
+      } else {
+        // Token invalid — clear it
+        localStorage.removeItem("token");
+        setUser(null);
+      }
+    } catch {
+      setUser(null);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchMe();
+  }, []);
+
+  return { user, loading, refresh: fetchMe };
+}
+
 /* ── Dropdown item ── */
 function NavDropdown({ label, items }) {
   const [open, setOpen] = useState(false);
@@ -35,7 +73,7 @@ function NavDropdown({ label, items }) {
       </button>
 
       {open && (
-        <div className="absolute left-0 top-full z-50 min-w-[180px] animate-slide-down rounded-lg border border-cg-border bg-cg-surface py-1.5 shadow-xl shadow-black/50">
+        <div className="absolute left-0 top-full z-50 min-w-[180px] animate-slide-down rounded-lg border-2 border-cg-border bg-cg-surface py-1.5 shadow-xl shadow-black/50">
           {items.map((item) => (
             <Link
               key={item.href}
@@ -56,7 +94,7 @@ function NavDropdown({ label, items }) {
 }
 
 /* ── Mobile menu ── */
-function MobileMenu({ isLoggedIn, username, isAdmin, onLogout }) {
+function MobileMenu({ user, onLogout }) {
   const [open, setOpen] = useState(false);
 
   const sections = [
@@ -86,7 +124,7 @@ function MobileMenu({ isLoggedIn, username, isAdmin, onLogout }) {
   return (
     <>
       <button
-        className="flex items-center justify-center w-10 h-10 rounded-md border border-cg-border text-cg-white-dim md:hidden"
+        className="flex items-center justify-center w-10 h-10 rounded-md border-2 border-cg-border text-cg-white-dim md:hidden"
         onClick={() => setOpen(!open)}
         aria-label="Toggle menu"
       >
@@ -100,7 +138,7 @@ function MobileMenu({ isLoggedIn, username, isAdmin, onLogout }) {
       </button>
 
       {open && (
-        <div className="absolute top-full left-0 right-0 z-50 animate-slide-down border-b border-cg-border bg-cg-surface md:hidden max-h-[calc(100vh-4rem)] overflow-y-auto">
+        <div className="absolute top-full left-0 right-0 z-50 animate-slide-down border-b-2 border-cg-border bg-cg-surface md:hidden max-h-[calc(100vh-4rem)] overflow-y-auto">
           <div className="px-4 py-4 space-y-4">
             {sections.map((section) => (
               <div key={section.title}>
@@ -119,19 +157,19 @@ function MobileMenu({ isLoggedIn, username, isAdmin, onLogout }) {
                 ))}
               </div>
             ))}
-            <div className="pt-2 border-t border-cg-border space-y-2">
+            <div className="pt-2 border-t-2 border-cg-border space-y-2">
               <Link href="/stats" className="block py-1.5 text-sm font-medium text-cg-white" onClick={() => setOpen(false)}>
                 Stats Viewer
               </Link>
               <Link href="/submit" className="block py-1.5 text-sm font-medium text-cg-white" onClick={() => setOpen(false)}>
                 Submit Records
               </Link>
-              {isLoggedIn ? (
+              {user ? (
                 <>
                   <Link href="/profile" className="block py-1.5 text-sm font-medium text-cg-white" onClick={() => setOpen(false)}>
-                    Profile ({username})
+                    Profile ({user.username})
                   </Link>
-                  {isAdmin && (
+                  {user.isAdmin && (
                     <Link href="/admin" className="block py-1.5 text-sm font-medium text-cg-orange" onClick={() => setOpen(false)}>
                       Admin Panel
                     </Link>
@@ -154,42 +192,17 @@ function MobileMenu({ isLoggedIn, username, isAdmin, onLogout }) {
 }
 
 export default function Navbar() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
+  const { user, loading, refresh } = useAuth();
   const router = useRouter();
-
-  useEffect(() => {
-    const checkAuth = () => {
-      const token = localStorage.getItem("token");
-      const user = localStorage.getItem("user");
-      if (token && user) {
-        const userData = JSON.parse(user);
-        setIsLoggedIn(true);
-        setUsername(userData.username);
-        setIsAdmin(userData.isAdmin || false);
-      } else {
-        setIsLoggedIn(false);
-        setUsername("");
-        setIsAdmin(false);
-      }
-    };
-    checkAuth();
-    window.addEventListener("storage", checkAuth);
-    return () => window.removeEventListener("storage", checkAuth);
-  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setIsLoggedIn(false);
-    setUsername("");
-    setIsAdmin(false);
+    refresh();
     router.push("/");
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-40 border-b border-cg-border backdrop-blur-md" style={{ backgroundColor: "color-mix(in srgb, var(--cg-bg) 92%, transparent)" }}>
+    <nav className="fixed top-0 left-0 right-0 z-40 border-b-2 border-cg-border backdrop-blur-md" style={{ backgroundColor: "color-mix(in srgb, var(--cg-bg) 92%, transparent)" }}>
       <div className="mx-auto max-w-7xl px-3 sm:px-6">
         <div className="flex h-16 items-center justify-between gap-2">
           {/* Logo */}
@@ -230,22 +243,23 @@ export default function Navbar() {
             <div className="hidden sm:block">
               <ThemeSwitcher />
             </div>
-            {isLoggedIn ? (
+            {/* Use server-verified user data, NOT localStorage */}
+            {!loading && user ? (
               <div className="hidden sm:flex items-center gap-2">
                 <Link href="/profile" className="px-3 py-2 text-sm font-medium text-cg-white-dim transition-colors duration-200 hover:text-cg-white">
-                  {username}
+                  {user.username}
                 </Link>
-                {isAdmin && (
+                {user.isAdmin && (
                   <Link href="/admin" className="cg-btn cg-btn-ghost text-sm">Admin</Link>
                 )}
-                <button onClick={handleLogout} className="cg-btn px-3 py-2 text-sm border border-red-500/30 text-red-400 hover:bg-red-500/10 rounded-md transition-all duration-200">
+                <button onClick={handleLogout} className="cg-btn px-3 py-2 text-sm border-2 border-red-500/30 text-red-400 hover:bg-red-500/10 rounded-md transition-all duration-200">
                   Logout
                 </button>
               </div>
-            ) : (
+            ) : !loading ? (
               <Link href="/auth/signup" className="cg-btn cg-btn-primary hidden sm:inline-flex">Sign Up</Link>
-            )}
-            <MobileMenu isLoggedIn={isLoggedIn} username={username} isAdmin={isAdmin} onLogout={handleLogout} />
+            ) : null}
+            <MobileMenu user={user} onLogout={handleLogout} />
           </div>
         </div>
       </div>

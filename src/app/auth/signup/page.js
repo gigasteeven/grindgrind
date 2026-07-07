@@ -31,8 +31,8 @@ export default function AuthPage() {
       if (data.error) {
         setError(data.error);
       } else {
+        // Store ONLY the token — user data is always fetched from server
         localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
         router.push("/profile");
       }
     } catch {

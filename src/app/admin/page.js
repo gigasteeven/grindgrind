@@ -25,8 +25,8 @@ function AdminLogin({ onLogin }) {
         setError("You do not have admin access.");
       } else {
         localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-        onLogin(data);
+        // Do NOT store user in localStorage — always verify with server
+        onLogin(data.token);
       }
     } catch {
       setError("Login failed.");
@@ -35,7 +35,7 @@ function AdminLogin({ onLogin }) {
 
   return (
     <div className="mx-auto max-w-md px-4 py-16">
-      <div className="cg-card">
+      <div className="cg-card p-6">
         <h1 className="text-xl font-bold text-cg-white mb-2">Admin Panel</h1>
         <p className="text-sm text-cg-white-dim mb-6">Login with your admin credentials.</p>
         <form onSubmit={handleLogin} className="space-y-4">
@@ -56,7 +56,7 @@ function AdminLogin({ onLogin }) {
             required
           />
           {error && (
-            <div className="rounded-md border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm text-red-400">
+            <div className="rounded-md border-2 border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm text-red-400">
               {error}
             </div>
           )}
@@ -73,7 +73,7 @@ function AdminLogin({ onLogin }) {
 function AddChallengeForm({ token, log, onAdded }) {
   const [form, setForm] = useState({
     name: "", id: "", author: "", verifier: "", verification: "",
-    password: "Not Copyable", percentToQualify: 100, listType: "challenge", tags: "",
+    password: "Not Copyable", percentToQualify: 100, listType: "challenge", tags: "", position: "",
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -89,6 +89,7 @@ function AddChallengeForm({ token, log, onAdded }) {
       ...form,
       id: String(form.id),
       percentToQualify: parseInt(form.percentToQualify) || 100,
+      position: form.position ? parseInt(form.position) : null,
       tags: form.tags ? form.tags.split(",").map(t => t.trim()).filter(Boolean) : [],
     };
     const res = await fetch("/api/admin/challenges/add", {
@@ -101,7 +102,7 @@ function AddChallengeForm({ token, log, onAdded }) {
       setError(data.error);
     } else {
       log("Added challenge", { name: form.name, id: form.id });
-      setSuccess(`Added "${form.name}" to ${form.listType} list`);
+      setSuccess(`Added "${form.name}" to ${form.listType} list at position ${data.position || "end"}`);
       setForm({ name: "", id: "", author: "", verifier: "", verification: "", password: "Not Copyable", percentToQualify: 100, listType: "challenge", tags: "", position: "" });
       setTimeout(() => setSuccess(""), 3000);
       onAdded();
@@ -136,8 +137,8 @@ function AddChallengeForm({ token, log, onAdded }) {
       </div>
       <input className="cg-input" placeholder="Tags (comma separated)" value={form.tags} onChange={e => setForm({ ...form, tags: e.target.value })} />
 
-      {error && <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/30 rounded-md px-3 py-2">{error}</div>}
-      {success && <div className="text-sm text-green-400 bg-green-500/10 border border-green-500/30 rounded-md px-3 py-2">{success}</div>}
+      {error && <div className="text-sm text-red-400 bg-red-500/10 border-2 border-red-500/30 rounded-md px-3 py-2">{error}</div>}
+      {success && <div className="text-sm text-green-400 bg-green-500/10 border-2 border-green-500/30 rounded-md px-3 py-2">{success}</div>}
 
       <button onClick={submit} className="cg-btn cg-btn-primary text-sm w-full">Add Challenge</button>
     </div>
@@ -189,7 +190,6 @@ function ChallengesTab({ token, log }) {
 
   return (
     <div className="space-y-3">
-      {/* Add challenge toggle */}
       <button onClick={() => setShowAdd(!showAdd)} className="cg-btn cg-btn-primary text-sm w-full">
         {showAdd ? "Close" : "+ Add New Challenge"}
       </button>
@@ -283,13 +283,13 @@ function PendingTab({ token, log }) {
             <div className="flex flex-col gap-2 shrink-0">
               {r.status === "pending" && (
                 <>
-                  <button onClick={() => approve(r)} className="cg-btn px-3 py-1.5 text-xs border border-green-500/30 text-green-400 hover:bg-green-500/10 rounded-md">Approve</button>
+                  <button onClick={() => approve(r)} className="cg-btn px-3 py-1.5 text-xs border-2 border-green-500/30 text-green-400 hover:bg-green-500/10 rounded-md">Approve</button>
                   <button
                     onClick={() => {
                       const reason = prompt("Reason for rejection (player will see this):");
                       if (reason !== null) reject(r, reason);
                     }}
-                    className="cg-btn px-3 py-1.5 text-xs border border-red-500/30 text-red-400 hover:bg-red-500/10 rounded-md"
+                    className="cg-btn px-3 py-1.5 text-xs border-2 border-red-500/30 text-red-400 hover:bg-red-500/10 rounded-md"
                   >
                     Reject
                   </button>
@@ -337,7 +337,7 @@ function ContentTab({ token, log, contentKey, label }) {
             rows={2}
           />
           <button onClick={() => setItems(items.filter((_, i) => i !== idx))}
-            className="cg-btn px-3 py-1 text-xs border border-red-500/30 text-red-400 rounded-md">Remove</button>
+            className="cg-btn px-3 py-1 text-xs border-2 border-red-500/30 text-red-400 rounded-md">Remove</button>
         </div>
       ))}
       <div className="flex gap-2">
@@ -378,10 +378,8 @@ function StaffTab({ token, log }) {
     <div className="space-y-4">
       {staff.map((member, idx) => (
         <div key={idx} className="cg-card space-y-3">
-          {/* Avatar + username row */}
           <div className="flex items-center gap-3">
-            {/* Avatar preview */}
-            <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-cg-orange/30 shrink-0 bg-cg-brown flex items-center justify-center">
+            <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-cg-orange/30 shrink-0 bg-cg-surface-2 flex items-center justify-center">
               {member.avatar ? (
                 <img src={member.avatar} alt={member.username} className="w-full h-full object-cover" />
               ) : (
@@ -405,10 +403,9 @@ function StaffTab({ token, log }) {
               />
             </div>
             <button onClick={() => setStaff(staff.filter((_, i) => i !== idx))}
-              className="cg-btn px-3 py-1.5 text-xs border border-red-500/30 text-red-400 rounded-md shrink-0">Remove</button>
+              className="cg-btn px-3 py-1.5 text-xs border-2 border-red-500/30 text-red-400 rounded-md shrink-0">Remove</button>
           </div>
 
-          {/* Avatar URL */}
           <div>
             <label className="block text-xs text-cg-white-dim mb-1">Avatar URL</label>
             <input
@@ -419,7 +416,6 @@ function StaffTab({ token, log }) {
             />
           </div>
 
-          {/* Socials */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             <div>
               <label className="block text-xs text-cg-white-dim mb-1">Telegram</label>
@@ -519,16 +515,47 @@ function AdminsTab({ token, log, isOwner }) {
       )}
       <div className="space-y-2">
         {admins.map((admin) => (
-          <div key={admin.username} className="flex items-center gap-3 rounded-md border border-cg-border bg-cg-brown/50 px-4 py-3">
+          <div key={admin.username} className="flex items-center gap-3 rounded-md border-2 border-cg-border bg-cg-surface-2/50 px-4 py-3">
             <span className="text-sm font-medium text-cg-white">{admin.username}</span>
             {admin.isOwner && <span className="cg-badge bg-cg-yellow/10 text-cg-yellow border border-cg-yellow/30">Owner</span>}
             {isOwner && !admin.isOwner && (
               <button onClick={() => removeAdmin(admin.username)}
-                className="ml-auto cg-btn px-3 py-1 text-xs border border-red-500/30 text-red-400 rounded-md">Remove</button>
+                className="ml-auto cg-btn px-3 py-1 text-xs border-2 border-red-500/30 text-red-400 rounded-md">Remove</button>
             )}
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+function LogsTab({ token }) {
+  const [logs, setLogs] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/admin/logs", { headers: { Authorization: `Bearer ${token}` } })
+      .then(r => r.json())
+      .then(data => setLogs(data.logs || []));
+  }, []);
+
+  return (
+    <div className="space-y-2">
+      {logs.length === 0 ? (
+        <p className="text-cg-white-dim text-sm">No admin actions logged yet.</p>
+      ) : (
+        logs.map((log, idx) => (
+          <div key={idx} className="rounded-md border-2 border-cg-border bg-cg-surface-2/30 px-4 py-2.5">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-cg-white">{log.action}</span>
+              <span className="text-xs text-cg-white-dim">{new Date(log.timestamp).toLocaleString()}</span>
+            </div>
+            <p className="text-xs text-cg-white-dim mt-0.5">By: {log.admin}</p>
+            {log.details && Object.keys(log.details).length > 0 && (
+              <p className="text-xs text-cg-white-dim/70 mt-0.5 font-mono">{JSON.stringify(log.details)}</p>
+            )}
+          </div>
+        ))
+      )}
     </div>
   );
 }
@@ -577,7 +604,6 @@ function UsersTab({ token, log }) {
 
   if (loading) return <p className="text-cg-white-dim">Loading...</p>;
 
-  // Separate owner from other users
   const owner = users.find(u => u.isOwner);
   const otherUsers = users.filter(u => !u.isOwner);
 
@@ -587,11 +613,10 @@ function UsersTab({ token, log }) {
         <div className="cg-card border-green-500/30 p-3 text-sm text-green-400">{success}</div>
       )}
 
-      {/* Owner — displayed separately */}
       {owner && (
         <div className="cg-card p-4" style={{ borderColor: "color-mix(in srgb, var(--cg-yellow) 30%, var(--cg-border))" }}>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-cg-surface-2 border border-cg-border flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-cg-surface-2 border-2 border-cg-border flex items-center justify-center">
               <span className="text-sm font-bold text-cg-yellow">👑</span>
             </div>
             <div>
@@ -604,12 +629,11 @@ function UsersTab({ token, log }) {
         </div>
       )}
 
-      {/* Other users */}
       {otherUsers.map((u) => (
         <div key={u.username} className="cg-card p-4">
           <div className="flex items-center justify-between flex-wrap gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-cg-surface-2 border border-cg-border flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full bg-cg-surface-2 border-2 border-cg-border flex items-center justify-center">
                 <span className="text-sm font-bold text-cg-orange">{u.username.charAt(0).toUpperCase()}</span>
               </div>
               <div>
@@ -632,7 +656,7 @@ function UsersTab({ token, log }) {
           </div>
 
           {editingUser === u.username && (
-            <div className="mt-4 pt-4 border-t border-cg-border space-y-3">
+            <div className="mt-4 pt-4 border-t-2 border-cg-border space-y-3">
               <div>
                 <label className="block text-xs text-cg-white-dim mb-1">New Password</label>
                 <input
@@ -664,56 +688,40 @@ function UsersTab({ token, log }) {
   );
 }
 
-function LogsTab({ token }) {
-  const [logs, setLogs] = useState([]);
-
-  useEffect(() => {
-    fetch("/api/admin/logs", { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => r.json())
-      .then(data => setLogs(data.logs || []));
-  }, []);
-
-  return (
-    <div className="space-y-2">
-      {logs.length === 0 ? (
-        <p className="text-cg-white-dim text-sm">No admin actions logged yet.</p>
-      ) : (
-        logs.map((log, idx) => (
-          <div key={idx} className="rounded-md border border-cg-border bg-cg-brown/30 px-4 py-2.5">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-cg-white">{log.action}</span>
-              <span className="text-xs text-cg-white-dim">{new Date(log.timestamp).toLocaleString()}</span>
-            </div>
-            <p className="text-xs text-cg-white-dim mt-0.5">By: {log.admin}</p>
-            {log.details && Object.keys(log.details).length > 0 && (
-              <p className="text-xs text-cg-white-dim/70 mt-0.5 font-mono">{JSON.stringify(log.details)}</p>
-            )}
-          </div>
-        ))
-      )}
-    </div>
-  );
-}
-
 /* ── Main Admin Panel ── */
 export default function AdminPage() {
-  const [authed, setAuthed] = useState(false);
-  const [token, setToken] = useState("");
-  const [isOwner, setIsOwner] = useState(false);
+  const [token, setToken] = useState(null);
+  const [user, setUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
   const [tab, setTab] = useState("challenges");
   const router = useRouter();
 
+  // On mount: check if we have a token, then VERIFY it with the server
   useEffect(() => {
     const t = localStorage.getItem("token");
-    const u = localStorage.getItem("user");
-    if (t && u) {
-      const userData = JSON.parse(u);
-      if (userData.isAdmin) {
-        setAuthed(true);
-        setToken(t);
-        setIsOwner(userData.isAdmin && userData.username === "admin");
-      }
+    if (!t) {
+      setAuthLoading(false);
+      return;
     }
+    // Verify token with server — NEVER trust localStorage for admin status
+    fetch("/api/auth/me", {
+      headers: { Authorization: `Bearer ${t}` },
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("Invalid token");
+        return res.json();
+      })
+      .then(data => {
+        if (data.isAdmin) {
+          setToken(t);
+          setUser(data);
+        }
+        // If not admin, token stays null → login form shows
+      })
+      .catch(() => {
+        localStorage.removeItem("token");
+      })
+      .finally(() => setAuthLoading(false));
   }, []);
 
   const log = async (action, details) => {
@@ -724,11 +732,32 @@ export default function AdminPage() {
     });
   };
 
-  if (!authed) return <AdminLogin onLogin={(data) => {
-    setAuthed(true);
-    setToken(data.token);
-    setIsOwner(data.user.username === "admin");
-  }} />;
+  if (authLoading) {
+    return (
+      <div className="mx-auto max-w-4xl px-4 py-20 text-center">
+        <div className="inline-block w-8 h-8 border-2 border-cg-orange border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  // If no valid admin token → show login form (ALWAYS, regardless of localStorage)
+  if (!token || !user) {
+    return <AdminLogin onLogin={(newToken) => {
+      // After login, verify with server again
+      fetch("/api/auth/me", {
+        headers: { Authorization: `Bearer ${newToken}` },
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.isAdmin) {
+            setToken(newToken);
+            setUser(data);
+          } else {
+            alert("You do not have admin access.");
+          }
+        });
+    }} />;
+  }
 
   const tabs = [
     { id: "challenges", label: "Challenges" },
@@ -742,19 +771,23 @@ export default function AdminPage() {
   ];
 
   return (
-    <div className="mx-auto max-w-4xl px-4 sm:px-6 py-8">
+    <div className="mx-auto max-w-4xl px-3 sm:px-6 py-6 sm:py-8">
       <div className="flex items-center justify-between mb-6">
         <h1 className="cg-section-title text-cg-white">Admin Panel</h1>
-        <button
-          onClick={() => {
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
-            router.push("/");
-          }}
-          className="cg-btn cg-btn-ghost text-sm"
-        >
-          Logout
-        </button>
+        <div className="flex items-center gap-3">
+          <span className="text-sm text-cg-white-dim hidden sm:inline">{user.username}</span>
+          <button
+            onClick={() => {
+              localStorage.removeItem("token");
+              setToken(null);
+              setUser(null);
+              router.push("/");
+            }}
+            className="cg-btn cg-btn-ghost text-sm"
+          >
+            Logout
+          </button>
+        </div>
       </div>
 
       {/* Tabs */}
@@ -765,8 +798,8 @@ export default function AdminPage() {
             onClick={() => setTab(t.id)}
             className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 ${
               tab === t.id
-                ? "bg-cg-orange text-cg-black"
-                : "border border-cg-border text-cg-white-dim hover:text-cg-white"
+                ? "cg-btn-primary"
+                : "border-2 border-cg-border text-cg-white-dim hover:text-cg-white"
             }`}
           >
             {t.label}
@@ -778,11 +811,11 @@ export default function AdminPage() {
       <div className="animate-fade-in">
         {tab === "challenges" && <ChallengesTab token={token} log={log} />}
         {tab === "pending" && <PendingTab token={token} log={log} />}
+        {tab === "users" && <UsersTab token={token} log={log} />}
         {tab === "rules" && <ContentTab token={token} log={log} contentKey="content:rules" label="Rules" />}
         {tab === "submission" && <ContentTab token={token} log={log} contentKey="content:submission" label="Submission Guidelines" />}
         {tab === "staff" && <StaffTab token={token} log={log} />}
-        {tab === "admins" && <AdminsTab token={token} log={log} isOwner={isOwner} />}
-        {tab === "users" && <UsersTab token={token} log={log} />}
+        {tab === "admins" && <AdminsTab token={token} log={log} isOwner={user.isOwner} />}
         {tab === "logs" && <LogsTab token={token} />}
       </div>
     </div>
