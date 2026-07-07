@@ -1,20 +1,44 @@
 import { Redis } from "@upstash/redis";
 
-export const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+let _redis = null;
+
+/**
+ * Lazy Redis singleton — initializes on first use so env vars
+ * are guaranteed to be loaded by Next.js at that point.
+ */
+export function getRedis() {
+  if (!_redis) {
+    const url = process.env.UPSTASH_REDIS_REST_URL;
+    const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+    if (!url || !token) {
+      throw new Error(
+        "UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN must be set in .env.local"
+      );
+    }
+    _redis = new Redis({ url, token });
+  }
+  return _redis;
+}
+
+/* Proxy: all exports use getRedis() internally */
+export const redis = new Proxy({}, {
+  get(_target, prop) {
+    const client = getRedis();
+    const value = client[prop];
+    return typeof value === "function" ? value.bind(client) : value;
+  },
 });
 
 /* ── Key helpers ── */
 export const KEYS = {
-  challengeList: "challenge:list",        // ordered array of level IDs
-  challengePrefix: "challenge:",          // challenge:{id} → JSON
+  challengeList: "challenge:list",
+  challengePrefix: "challenge:",
   platformerList: "platformer:list",
   platformerPrefix: "platformer:",
-  users: "users",                          // hash: username → JSON
-  userPrefix: "user:",                     // user:{username} → JSON
-  adminLogs: "admin:logs",                 // list of log entries
-  pendingRecords: "records:pending",      // list of submitted records
+  users: "users",
+  userPrefix: "user:",
+  adminLogs: "admin:logs",
+  pendingRecords: "records:pending",
   rules: "content:rules",
   submission: "content:submission",
   staff: "content:staff",
@@ -84,7 +108,6 @@ export async function addAdminLog(entry) {
     ...entry,
     timestamp: new Date().toISOString(),
   });
-  // Keep last 500 logs
   if (logs.length > 500) logs = logs.slice(0, 500);
   await redis.set(KEYS.adminLogs, JSON.stringify(logs));
 }
