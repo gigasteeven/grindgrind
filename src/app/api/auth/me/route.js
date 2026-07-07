@@ -16,7 +16,7 @@ export async function GET(request) {
     return NextResponse.json({ error: "No token" }, { status: 401 });
   }
 
-  const decoded = verifyToken(token);
+  const decoded = await verifyToken(token);
   if (!decoded) {
     return NextResponse.json({ error: "Invalid or expired token" }, { status: 401 });
   }

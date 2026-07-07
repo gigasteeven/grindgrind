@@ -7,7 +7,7 @@ import bcrypt from "bcryptjs";
 export async function POST(request) {
   const authHeader = request.headers.get("authorization");
   const token = authHeader?.replace("Bearer ", "");
-  const decoded = verifyToken(token);
+  const decoded = await verifyToken(token);
   if (!decoded?.isAdmin) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

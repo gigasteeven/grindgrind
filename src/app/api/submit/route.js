@@ -6,7 +6,7 @@ import { addPendingRecord } from "@/lib/redis";
 export async function POST(request) {
   const authHeader = request.headers.get("authorization");
   const token = authHeader?.replace("Bearer ", "");
-  const decoded = verifyToken(token);
+  const decoded = await verifyToken(token);
   if (!decoded) {
     return NextResponse.json({ error: "Unauthorized — please log in" }, { status: 401 });
   }

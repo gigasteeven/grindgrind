@@ -1,5 +1,21 @@
 # Changelog — ChallengeGrind
 
+## [0.9.0] — 2026-07-07: Edge-compatible JWT (jose), CF Pages build fixes
+
+### Critical: jsonwebtoken → jose
+- `jsonwebtoken` uses Node.js `crypto`/`stream` modules — не работает на Cloudflare edge
+- Заменён на `jose` — edge-compatible JWT библиотека
+- Новый файл: `src/lib/jwt-edge.js` — SignJWT/jwtVerify из jose
+- `auth.js`: verifyToken теперь async (jose возвращает Promise)
+- Все API routes: `verifyToken(token)` → `await verifyToken(token)`
+
+### Build Fixes
+- `next.config.js`: убран `experimental.runtime: "nodejs"` (конфликтует с edge)
+- `package.json`: `next` pinned to `14.2.35`, `@cloudflare/next-on-pages` pinned to `1.13.16`
+- `.npmrc`: `legacy-peer-deps=true` для разрешения конфликтов зависимостей
+- Убран `jsonwebtoken` из dependencies
+- Добавлен `jose` в dependencies
+
 ## [0.8.0] — 2026-07-07: Verifier points, Created/Published in profile, Stats Viewer
 
 ### Verifier Gets Points + Completions

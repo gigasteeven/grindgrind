@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import { jwtSign, jwtVerify } from "./jwt-edge";
 import { redis, KEYS, getUser } from "./redis";
 
 const JWT_SECRET = process.env.JWT_SECRET || "challengegrind_secret_key_2026";
@@ -60,7 +60,7 @@ export async function registerPlayer({ username, password, country, captchaToken
 
   await redis.set(`${KEYS.userPrefix}${username.toLowerCase()}`, user);
 
-  const token = jwt.sign({ username, isAdmin: false }, JWT_SECRET, { expiresIn: "7d" });
+  const token = await jwtSign({ username, isAdmin: false }, JWT_SECRET);
   return { token, user: { username, country: user.country, isAdmin: false } };
 }
 
@@ -83,10 +83,9 @@ export async function loginPlayer({ username, password, captchaToken }) {
     return { error: "Invalid password" };
   }
 
-  const token = jwt.sign(
+  const token = await jwtSign(
     { username: user.username, isAdmin: user.isAdmin || false },
-    JWT_SECRET,
-    { expiresIn: "7d" }
+    JWT_SECRET
   );
   return {
     token,
@@ -97,10 +96,20 @@ export async function loginPlayer({ username, password, captchaToken }) {
 /**
  * Verify JWT token from request.
  */
-export function verifyToken(token) {
+export async function verifyToken(token) {
   try {
-    return jwt.verify(token, JWT_SECRET);
+    return await jwtVerify(token, JWT_SECRET);
   } catch {
     return null;
   }
+}
+
+/**
+ * Get auth context from Next.js request.
+ */
+export async function getAuthContext(request) {
+  const authHeader = request.headers.get("authorization");
+  const token = authHeader?.replace("Bearer ", "");
+  if (!token) return null;
+  return await verifyToken(token);
 }

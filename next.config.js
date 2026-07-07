@@ -4,10 +4,6 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Required for Cloudflare Pages
-  experimental: {
-    runtime: "nodejs",
-  },
 };
 
 module.exports = nextConfig;

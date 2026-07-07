@@ -7,7 +7,7 @@ import { getRankings } from "@/lib/formula";
 export async function GET(request) {
   const authHeader = request.headers.get("authorization");
   const token = authHeader?.replace("Bearer ", "");
-  const decoded = verifyToken(token);
+  const decoded = await verifyToken(token);
   if (!decoded) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
