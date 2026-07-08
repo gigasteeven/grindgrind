@@ -3,6 +3,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
+export const runtime = 'edge';
+
 export const metadata = {
   title: "ChallengeGrind",
   description: "Geometry Dash Challenge List",
