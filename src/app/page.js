@@ -1,8 +1,4 @@
 import Link from "next/link";
-<<<<<<< HEAD
-
-export default function HomePage() {
-=======
 import { getChangelog } from "@/lib/redis";
 import RecentChanges from "@/components/RecentChanges";
 
@@ -11,8 +7,6 @@ export const revalidate = 60;
 
 export default async function HomePage() {
   const changelogEntries = await getChangelog(30);
-
->>>>>>> 93b1e84 (some changes)
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6">
       {/* Hero */}
@@ -44,16 +38,12 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-<<<<<<< HEAD
-=======
-
       {/* Recent Changes */}
       {changelogEntries && changelogEntries.length > 0 && (
         <section className="pb-16 sm:pb-20 px-0 sm:px-4">
           <RecentChanges initialEntries={changelogEntries} />
         </section>
       )}
->>>>>>> 93b1e84 (some changes)
     </div>
   );
 }
