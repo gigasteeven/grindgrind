@@ -84,10 +84,7 @@ export const KEYS = {
   submission: "content:submission",
   staff: "content:staff",
   social: "content:social",
-<<<<<<< HEAD
-=======
   changelog: "changelog:entries",
->>>>>>> 93b1e84 (some changes)
 };
 
 // ── Pipeline: batch multiple GET commands in one HTTP request ──
@@ -221,9 +218,6 @@ export async function getContent(key) {
 export async function setContent(key, value) {
   await redisSet(key, value);
 }
-<<<<<<< HEAD
-=======
-
 // ── Changelog (public feed on home page) ──
 export async function addChangelogEntry(entry) {
   const entries = (await redisGet(KEYS.changelog)) || [];
@@ -244,4 +238,3 @@ export async function getChangelog(limit = 50) {
   const entries = (await redisGet(KEYS.changelog)) || [];
   return entries.slice(0, limit);
 }
->>>>>>> 93b1e84 (some changes)

@@ -288,9 +288,6 @@
   .animate-slide-down {
     animation: slideDown 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   }
-<<<<<<< HEAD
-=======
-
   /* ── Changelog feed ── */
   .cg-changelog-section {
     @apply rounded-xl border-2 overflow-hidden;
@@ -398,7 +395,6 @@
   .cg-changelog-toggle:hover {
     background-color: color-mix(in srgb, var(--cg-surface-2) 50%, transparent);
   }
->>>>>>> 93b1e84 (some changes)
 }
 
 @keyframes fadeIn {
