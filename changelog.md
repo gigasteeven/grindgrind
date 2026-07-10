@@ -387,6 +387,13 @@ npx wrangler pages deploy .vercel/output/static --project-name challengegrind
 - Challenge Card: минималистичный дизайн
 - Profile: баннер, флаг, статы, record status
 
+### [0.3.1] — 2026-07-10: Mass reordering & public changelog feed
+- **Public Changelog (Recent Changes):** На главную страницу добавлена лента изменений списка. Показывает повышение (зеленая стрелка вверх), понижение (желтая стрелка вниз) и добавление новых уровней (зеленый плюсик). Поддерживает мобильный дизайн.
+- **Admin Panel Refactor:** Изменения позиций в админ-панели теперь происходят локально. Кнопки `↑` и `↓` не отправляют спам-запросов и не спамят в логи.
+- **Batch Saving:** Появились кнопки `Save Changes` и `Discard`.
+- **API `reorder`:** Добавлен роут для массового сохранения нового порядка. Автоматически генерирует историю изменений (что поднялось, что упало) и пишет в `changelog:entries` в Redis.
+- **Build fixes:** Устранены множественные merge-конфликты, блокировавшие сборку проекта на Cloudflare Pages.
+
 ### [0.3.0] — 2026-07-08: Cloudflare Pages deploy + major fixes
 
 #### Deploy (Cloudflare Pages)
