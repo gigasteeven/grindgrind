@@ -154,46 +154,25 @@ function AddChallengeForm({ token, log, onAdded }) {
 
 function ChallengesTab({ token, log }) {
   const [challenges, setChallenges] = useState([]);
-<<<<<<< HEAD
-  const [loading, setLoading] = useState(true);
-  const [showAdd, setShowAdd] = useState(false);
-=======
   const [originalOrder, setOriginalOrder] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState("");
->>>>>>> 93b1e84 (some changes)
 
   const fetchChallenges = async () => {
     const res = await fetch("/api/admin/challenges", {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
-<<<<<<< HEAD
-    setChallenges(data.challenges || []);
-=======
     const list = data.challenges || [];
     setChallenges(list);
     setOriginalOrder(list.map(c => c.id));
->>>>>>> 93b1e84 (some changes)
     setLoading(false);
   };
 
   useEffect(() => { fetchChallenges(); }, []);
 
-<<<<<<< HEAD
-  const movePosition = async (id, direction) => {
-    const res = await fetch("/api/admin/challenges/move", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ id, direction }),
-    });
-    if (res.ok) {
-      log("Moved challenge position", { id, direction });
-      fetchChallenges();
-    }
-=======
   // Check if order has changed
   const currentOrder = challenges.map(c => c.id);
   const hasChanges = JSON.stringify(currentOrder) !== JSON.stringify(originalOrder);
@@ -237,7 +216,6 @@ function ChallengesTab({ token, log }) {
       alert("Failed to save changes.");
     }
     setSaving(false);
->>>>>>> 93b1e84 (some changes)
   };
 
   const deleteChallenge = async (id, name) => {
@@ -263,25 +241,6 @@ function ChallengesTab({ token, log }) {
 
       {showAdd && <AddChallengeForm token={token} log={log} onAdded={fetchChallenges} />}
 
-<<<<<<< HEAD
-      {challenges.map((c, idx) => (
-        <div key={c.id} className="flex items-center gap-2 sm:gap-3 rounded-md border-2 border-cg-border bg-cg-surface-2/50 px-3 sm:px-4 py-3">
-          <span className="w-7 sm:w-8 text-sm font-bold text-cg-orange shrink-0">#{idx + 1}</span>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-cg-white truncate">{c.name}</p>
-            <p className="text-xs text-cg-white-dim">ID: {c.id} · {c.records?.length || 0} records</p>
-          </div>
-          <div className="flex gap-1 shrink-0">
-            <button onClick={() => movePosition(c.id, -1)} disabled={idx === 0}
-              className="cg-btn cg-btn-ghost px-2 py-1 text-xs disabled:opacity-30">↑</button>
-            <button onClick={() => movePosition(c.id, 1)} disabled={idx === challenges.length - 1}
-              className="cg-btn cg-btn-ghost px-2 py-1 text-xs disabled:opacity-30">↓</button>
-            <button onClick={() => deleteChallenge(c.id, c.name)}
-              className="cg-btn px-2 py-1 text-xs border-2 border-red-500/30 text-red-400 hover:bg-red-500/10">Del</button>
-          </div>
-        </div>
-      ))}
-=======
       {/* Save / Discard bar */}
       {hasChanges && (
         <div className="sticky top-0 z-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 rounded-xl border-2 p-3 sm:p-4 animate-fade-in"
@@ -349,7 +308,6 @@ function ChallengesTab({ token, log }) {
           </div>
         );
       })}
->>>>>>> 93b1e84 (some changes)
     </div>
   );
 }
@@ -406,11 +364,7 @@ function PendingTab({ token, log }) {
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-cg-white break-words">
-<<<<<<< HEAD
-                {r.playerName} → {r.challengeId}
-=======
                 {r.playerName} → {r.challengeName || r.challengeId}
->>>>>>> 93b1e84 (some changes)
               </p>
               <div className="mt-1 space-y-0.5 text-xs text-cg-white-dim">
                 <p className="break-all">Video: <a href={r.videoLink} target="_blank" rel="noopener noreferrer" className="text-cg-orange underline">Link</a></p>

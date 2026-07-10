@@ -1,11 +1,7 @@
 import { NextResponse } from "next/server";
 export const runtime = "edge";
 import { verifyToken } from "@/lib/auth";
-<<<<<<< HEAD
-import { redis, KEYS, addAdminLog } from "@/lib/redis";
-=======
 import { redis, KEYS, addAdminLog, addChangelogEntry } from "@/lib/redis";
->>>>>>> 93b1e84 (some changes)
 
 export async function POST(request) {
   const authHeader = request.headers.get("authorization");
@@ -51,8 +47,6 @@ export async function POST(request) {
   // Save challenge data
   await redis.set(`${prefix}${id}`, challenge);
 
-<<<<<<< HEAD
-=======
   // Get names of neighbors for changelog
   let aboveName = null;
   let belowName = null;
@@ -86,8 +80,6 @@ export async function POST(request) {
     aboveName,
     belowName,
   });
-
->>>>>>> 93b1e84 (some changes)
   await addAdminLog({
     admin: decoded.username,
     action: "Added challenge",
@@ -96,7 +88,4 @@ export async function POST(request) {
 
   return NextResponse.json({ success: true, position: insertPos + 1 });
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> 93b1e84 (some changes)

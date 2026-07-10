@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { getChallenge, getPlatformer, getChallengeList, getPlatformerList } from "@/lib/redis";
-=======
 import { getChallenge, getPlatformer, getChallengeList, getPlatformerList, redis, KEYS } from "@/lib/redis";
->>>>>>> 93b1e84 (some changes)
 import { calculatePoints } from "@/lib/formula";
 import LevelDetail from "@/components/LevelDetail";
 
@@ -24,8 +20,6 @@ export default async function LevelPage({ params }) {
     );
   }
 
-<<<<<<< HEAD
-=======
   if (challenge.records && challenge.records.length > 0) {
     const uniqueUsernames = [...new Set(challenge.records.map(r => r.user.toLowerCase()))];
     const userKeys = uniqueUsernames.map(u => `${KEYS.userPrefix}${u}`);
@@ -43,8 +37,6 @@ export default async function LevelPage({ params }) {
       country: userCountryMap[r.user.toLowerCase()] || r.country
     }));
   }
-
->>>>>>> 93b1e84 (some changes)
   const points = calculatePoints(position, list.length || 1);
 
   return (

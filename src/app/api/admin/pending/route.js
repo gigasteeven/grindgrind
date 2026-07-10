@@ -1,11 +1,7 @@
 import { NextResponse } from "next/server";
 export const runtime = "edge";
 import { verifyToken } from "@/lib/auth";
-<<<<<<< HEAD
-import { getPendingRecords } from "@/lib/redis";
-=======
 import { getPendingRecords, getChallengeList, getPlatformerList } from "@/lib/redis";
->>>>>>> 93b1e84 (some changes)
 
 export async function GET(request) {
   const authHeader = request.headers.get("authorization");
@@ -16,10 +12,6 @@ export async function GET(request) {
   }
 
   const records = await getPendingRecords();
-<<<<<<< HEAD
-  return NextResponse.json({ records });
-=======
-  
   const challenges = await getChallengeList();
   const platformers = await getPlatformerList();
   const allLevels = [...challenges, ...platformers];
@@ -36,5 +28,4 @@ export async function GET(request) {
   }));
 
   return NextResponse.json({ records: enrichedRecords });
->>>>>>> 93b1e84 (some changes)
 }
