@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 export const runtime = "edge";
 import { verifyToken } from "@/lib/auth";
-import { redis, KEYS, addAdminLog } from "@/lib/redis";
+import { redis, KEYS, addAdminLog, addChangelogEntry } from "@/lib/redis";
 
 export async function POST(request) {
   const authHeader = request.headers.get("authorization");
@@ -12,6 +12,10 @@ export async function POST(request) {
   }
 
   const { id } = await request.json();
+
+  // Get challenge name before deletion
+  const challenge = await redis.get(`${KEYS.challengePrefix}${id}`);
+  const challengeName = challenge ? challenge.name : `Уровень ${id}`;
 
   // Remove from list
   const listRaw = await redis.get(KEYS.challengeList);
@@ -26,6 +30,11 @@ export async function POST(request) {
     admin: decoded.username,
     action: "Deleted challenge",
     details: { id },
+  });
+
+  await addChangelogEntry({
+    type: "deleted",
+    challengeName,
   });
 
   return NextResponse.json({ success: true });

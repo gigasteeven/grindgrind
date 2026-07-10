@@ -367,6 +367,10 @@
     color: #4ade80;
     background-color: color-mix(in srgb, #4ade80 12%, transparent);
   }
+  .cg-changelog-deleted {
+    color: #ef4444;
+    background-color: color-mix(in srgb, #ef4444 12%, transparent);
+  }
 
   .cg-changelog-name {
     @apply font-bold;

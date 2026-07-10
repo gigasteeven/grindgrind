@@ -61,6 +61,16 @@ function AddedIcon() {
   );
 }
 
+function DeletedIcon() {
+  return (
+    <span className="cg-changelog-icon cg-changelog-deleted" title="Deleted">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M3 3L11 11M11 3L3 11" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+      </svg>
+    </span>
+  );
+}
+
 function ChangelogEntry({ entry }) {
   const { type, challengeName, oldPos, newPos, aboveName, belowName } = entry;
 
@@ -70,6 +80,7 @@ function ChangelogEntry({ entry }) {
         {type === "raised" && <RaisedIcon />}
         {type === "lowered" && <LoweredIcon />}
         {type === "added" && <AddedIcon />}
+        {type === "deleted" && <DeletedIcon />}
       </div>
       <div className="cg-changelog-entry-content">
         <span className="cg-changelog-name">{challengeName}</span>
@@ -80,6 +91,10 @@ function ChangelogEntry({ entry }) {
             {" "}
             <span className="cg-changelog-pos">#{newPos}</span>
           </>
+        ) : type === "deleted" ? (
+          <>
+            <span className="cg-changelog-detail">удален</span>
+          </>
         ) : (
           <>
             <span className="cg-changelog-pos">#{oldPos}</span>
@@ -89,14 +104,14 @@ function ChangelogEntry({ entry }) {
         )}
         {aboveName && (
           <>
-            <span className="cg-changelog-detail">, выше</span>
+            <span className="cg-changelog-detail">, ниже</span>
             {" "}
             <span className="cg-changelog-neighbor">{aboveName}</span>
           </>
         )}
         {belowName && (
           <>
-            <span className="cg-changelog-detail">, ниже</span>
+            <span className="cg-changelog-detail">, выше</span>
             {" "}
             <span className="cg-changelog-neighbor">{belowName}</span>
           </>
