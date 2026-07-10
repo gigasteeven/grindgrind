@@ -73,27 +73,31 @@ function ChangelogEntry({ entry }) {
       </div>
       <div className="cg-changelog-entry-content">
         <span className="cg-changelog-name">{challengeName}</span>
+        {" "}
         {type === "added" ? (
           <>
-            <span className="cg-changelog-detail"> добавлен на </span>
+            <span className="cg-changelog-detail">добавлен на</span>
+            {" "}
             <span className="cg-changelog-pos">#{newPos}</span>
           </>
         ) : (
           <>
-            <span className="cg-changelog-pos"> #{oldPos}</span>
+            <span className="cg-changelog-pos">#{oldPos}</span>
             <span className="cg-changelog-detail"> → </span>
             <span className="cg-changelog-pos">#{newPos}</span>
           </>
         )}
         {aboveName && (
           <>
-            <span className="cg-changelog-detail">, выше </span>
+            <span className="cg-changelog-detail">, выше</span>
+            {" "}
             <span className="cg-changelog-neighbor">{aboveName}</span>
           </>
         )}
         {belowName && (
           <>
-            <span className="cg-changelog-detail">, ниже </span>
+            <span className="cg-changelog-detail">, ниже</span>
+            {" "}
             <span className="cg-changelog-neighbor">{belowName}</span>
           </>
         )}

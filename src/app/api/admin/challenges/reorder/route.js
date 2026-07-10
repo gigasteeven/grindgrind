@@ -32,18 +32,62 @@ export async function POST(request) {
     }
   });
 
-  // Build old position map
-  const oldPosMap = {};
-  oldOrder.forEach((id, i) => { oldPosMap[id] = i + 1; });
+  // Compute explicitly moved items using Longest Increasing Subsequence (LIS)
+  const oldIdxMap = {};
+  oldOrder.forEach((id, i) => { oldIdxMap[id] = i; });
 
-  // Find changes and create changelog entries
+  const sequence = [];
+  const seqIds = [];
+  newOrder.forEach(id => {
+    if (oldIdxMap[id] !== undefined) {
+      sequence.push(oldIdxMap[id]);
+      seqIds.push(id);
+    }
+  });
+
+  const tails = [];
+  const parent = new Array(sequence.length).fill(-1);
+
+  for (let i = 0; i < sequence.length; i++) {
+    const val = sequence[i];
+    let left = 0, right = tails.length;
+    while (left < right) {
+      const mid = Math.floor((left + right) / 2);
+      if (sequence[tails[mid]] < val) {
+        left = mid + 1;
+      } else {
+        right = mid;
+      }
+    }
+    if (left > 0) {
+      parent[i] = tails[left - 1];
+    }
+    if (left === tails.length) {
+      tails.push(i);
+    } else {
+      tails[left] = i;
+    }
+  }
+
+  const lisSet = new Set();
+  if (tails.length > 0) {
+    let curr = tails[tails.length - 1];
+    while (curr !== -1) {
+      lisSet.add(seqIds[curr]);
+      curr = parent[curr];
+    }
+  }
+
+  // Find changes and create changelog entries ONLY for explicitly moved items
   const changelogEntries = [];
   const movedDetails = [];
 
   newOrder.forEach((id, newIdx) => {
     const newPos = newIdx + 1;
-    const oldPos = oldPosMap[id];
-    if (oldPos && oldPos !== newPos) {
+    const oldPos = oldIdxMap[id] !== undefined ? oldIdxMap[id] + 1 : null;
+    
+    // Only log if it was explicitly moved (not in LIS) and its position actually changed
+    if (oldPos && oldPos !== newPos && !lisSet.has(id)) {
       const aboveId = newIdx > 0 ? newOrder[newIdx - 1] : null;
       const belowId = newIdx < newOrder.length - 1 ? newOrder[newIdx + 1] : null;
 
